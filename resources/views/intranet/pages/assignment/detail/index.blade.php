@@ -9,7 +9,7 @@
                 <h4 class="card-title">Rifas Asignadas</h4>
             </div>
             <ul class="" id="myTab-3" role="tablist">
-                <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal"><i class="fa-solid fa-plus me-2"></i>Nuevo Asignacion</button>-->
+                <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"><i class="fa-solid fa-plus me-2"></i>Nuevo Asignacion</button>-->
             </ul>
         </div>
 
@@ -40,7 +40,7 @@
                                         <td>{{$detail->raffle->code}}</td>
                                         <td>{{$detail->raffle->selected == '0' ? 'Libre' : 'Ocupada'}}</td>
                                         <td style="width:25px">
-                                            {{--<button type="button" class="btn btn-info"  data-bs-toggle="modal" data-bs-target="#basicModalEdit{{$assignment->id}}"><i class="fa-solid fa-pen me-2"></i>Editar</button>--}}
+                                            {{--<button type="button" class="btn btn-info"  data-toggle="modal" data-target="#basicModalEdit{{$assignment->id}}"><i class="fa-solid fa-pen me-2"></i>Editar</button>--}}
                                             {{--<a href="{{route('serials.destroy', $item->id)}}" class="btn btn-danger"><i class="fa-solid fa-trash me-2"></i>Eliminar</a>--}}
                                         </td>
                                     </tr>
@@ -69,8 +69,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Editar Responsable</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                </button>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <form action="{{route('users.update', $item->id)}}" method="post">
                 @csrf
@@ -123,7 +124,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Crear</button>
                 </div>
             </form>

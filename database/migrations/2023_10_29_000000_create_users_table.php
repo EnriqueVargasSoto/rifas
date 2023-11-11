@@ -26,8 +26,10 @@ return new class extends Migration
             $table->string('password');
             $table->string('clave');
             $table->string('observation')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

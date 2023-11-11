@@ -11,10 +11,14 @@ class RaffleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $raffles = Raffle::paginate(5000);
-        return view('intranet.pages.raffles.index', compact(['raffles']));
+        $search = $request->query('search');
+        $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser')->byStatus($request->query('status'))
+            ->bySearch($search)
+            ->paginate(20);
+
+        return view('intranet.pages.raffles.index', compact('raffles', 'search'));
     }
 
     /**

@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
             'clave' => '123456',
         ]);
 
-        for ($i=1; $i <= 50000; $i++) {
+        for ($i=1; $i <= 5000; $i++) {
             # code...
             $codigo = str_pad($i, 5, '0', STR_PAD_LEFT);
 

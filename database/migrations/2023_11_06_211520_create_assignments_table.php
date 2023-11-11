@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('option1_id')->nullable();
-            $table->foreign('option1_id')->references('id')->on('users');
-            $table->unsignedBigInteger('option2_id')->nullable();
-            $table->foreign('option2_id')->references('id')->on('users');
-            $table->unsignedBigInteger('option3_id')->nullable();
-            $table->foreign('option3_id')->references('id')->on('users');
-            $table->integer('start');
-            $table->integer('end');
+            $table->unsignedBigInteger('user_id_1')->nullable();
+            $table->unsignedBigInteger('user_id_2')->nullable();
+            $table->unsignedBigInteger('user_id_3')->nullable();
+            $table->enum('type',["rango","codigos"])->default("rango");
+            $table->integer('start')->nullable();
+            $table->integer('end')->nullable();
+            $table->text('codes')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

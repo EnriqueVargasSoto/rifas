@@ -1,5 +1,6 @@
-<div class="footer out-footer">
-    <div class="copyright">
-       <p>Copyright © Developed by <a href="https://dexignzone.com/" target="_blank">DexignZone</a> 2023</p>
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> 3.2.0
     </div>
-</div>
+    <strong>Copyright &copy; 2014-2021 <a href=""></a>Dev.</strong> All rights reserved.
+  </footer>

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AssignmentController;
+use App\Http\Controllers\CartShopingController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RaffleController as RaffleControllerPublic;
 use App\Models\Raffle;
 
 /*
@@ -18,14 +21,18 @@ use App\Models\Raffle;
 |
 */
 
-Route::get('/', function () {
-    $rifas = Raffle::paginate(50);
-    return view('welcome', compact(['rifas']));
-});
+
+Route::get('/', [RaffleControllerPublic::class, 'index'])->name('welcome');
+
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/cart', [CartShopingController::class,'index'])->name('cart.index');
+Route::post('/cart', [CartShopingController::class,'addItem'])->name('cart.addItem');
+Route::delete('/cart/{id}', [CartShopingController::class,'removeItem'])->name('cart.remove');
+Route::post('/checkout', [CartShopingController::class,'checkout'])->name('cart.checkout');
+Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
 
 //intranet
 
