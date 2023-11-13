@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_method');
+            $table->string('payment_method')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->unsignedBigInteger('client_id')->nullable();
-            $table->unsignedBigInteger('invoice_id');
+            $table->unsignedBigInteger('order_id')->nullable();
             $table->unsignedBigInteger('raffle_id');
+            $table->date('payment_at')->nullable();
             $table->decimal('total', 10, 2)->default(0);
             $table->string('image_payment_url')->nullable();
             $table->timestamps();

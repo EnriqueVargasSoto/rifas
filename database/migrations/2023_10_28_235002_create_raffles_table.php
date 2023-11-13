@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_visible_in_web')->default(false);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_available')->default(true);
-            $table->decimal('price', 10, 2)->default(10);
+            $table->decimal('price', 10, 2)->default(20);
             $table->unsignedBigInteger('user_id_1')->nullable();
             $table->unsignedBigInteger('user_id_2')->nullable();
             $table->unsignedBigInteger('user_id_3')->nullable();
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id')->nullable();
             $table->unsignedBigInteger('invoice_id')->nullable();
             $table->unsignedBigInteger('invoice_item_id')->nullable();
+            $table->dateTime('reserved_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

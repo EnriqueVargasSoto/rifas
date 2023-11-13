@@ -27,6 +27,17 @@
             </div>
         @endif
 
+        @auth('client')
+            @if (count(session('cart', [])))
+                <div class="alert alert-info">
+                    <b>Mi carrito: </b> <b>Rifas: </b> {{ count(session('cart')) }} <b>Total</b> :
+                    {{ count(session('cart')) * 20 }}  <a href="{{route('cart.index')}}">
+                        <i class="fa fa-shopping-cart"></i> Ver carrito
+                    </a>
+                </div>
+            @endif
+        @endauth
+
         <div class="row row-cols-1 row-cols-md-3 g-4">
             @foreach ($raffles as $rifa)
                 <div class="col">
@@ -57,7 +68,14 @@
                 </div>
             @endforeach
         </div>
-        {{ $raffles->appends(['start' => $start, 'end' => $end])->links() }}
+        <div class="w-100 d-flex justify-content-between">
+            @if (count($raffles))
+                <p>Mostrando {{ $raffles->firstItem() }} a {{ $raffles->lastItem() }} de
+                    {{ $raffles->total() }} resultados</p>
+            @endif
+            {{ $raffles->appends(['start' => $start, 'end' => $end])->links() }}
+        </div>
+
 
 
         {{-- Mensaje no existen items --}}
@@ -66,7 +84,6 @@
             <div class="alert alert-info mt-5">
                 No existen rifas disponibles
             </div>
-
         @endif
     </div>
 @endsection

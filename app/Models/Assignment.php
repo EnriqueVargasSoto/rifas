@@ -20,15 +20,19 @@ class Assignment extends Model
         'end'
     ];
 
-    function option1(){
-        return $this->belongsTo(User::class, 'option1_id');
+    public function firstUser()
+    {
+        return $this->belongsTo(User::class, 'user_id_1', 'id');
     }
 
-    function option2(){
-        return $this->belongsTo(User::class, 'option2_id');
+    public function secondUser()
+    {
+        return $this->belongsTo(User::class, 'user_id_2', 'id');
     }
 
-    function option3(){
-        return $this->belongsTo(User::class, 'option3_id');
+    public function thirdUser()
+    {
+        return $this->belongsTo(User::class, 'user_id_3', 'id');
     }
+
 }

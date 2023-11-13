@@ -16,8 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id');
             $table->decimal('total', 10, 2)->default(0);
             $table->string('payment_method')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->string('image_payment_url')->nullable();
-            $table->enum('status',['reservado','aprobado'])->default('reservado');
+            $table->string('invoice_url')->nullable();
+            $table->enum('status',['reservado','aprobado', 'cancelado'])->default('reservado');
             $table->timestamps();
             $table->softDeletes();
         });

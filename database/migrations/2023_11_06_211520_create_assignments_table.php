@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('start')->nullable();
             $table->integer('end')->nullable();
             $table->text('codes')->nullable();
+            $table->boolean('is_visible_in_web')->default(0);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

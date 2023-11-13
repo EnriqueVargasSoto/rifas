@@ -18,16 +18,16 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
 
-                <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                <li class="nav-item ">
+                    <a href="{{ route('users.index') }}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
                         <i class="nav-icon far fa-user"></i>
                         <p>
                             Responsables
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('rifas.index') }}" class="nav-link">
+                <li class="nav-item ">
+                    <a href="{{ route('rifas.index') }}" class="nav-link {{ request()->is('rifas') ? 'active' : '' }}">
                         <i class="nav-icon far fa-id-card"></i>
                         
                         <p>
@@ -35,11 +35,27 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('assignaciones.index') }}" class="nav-link">
+                <li class="nav-item ">
+                    <a href="{{ route('assignaciones.index') }}" class="nav-link {{ request()->is('assignaciones') ? 'active' : '' }}">
                         <i class="nav-icon far fa-user"></i>
                         <p>
                             Asignación
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a href="{{ route('orders.index') }}" class="nav-link {{ request()->is('orders') ? 'active' : '' }}">
+                        <i class="nav-icon far fa fa-shopping-cart"></i>
+                        <p>
+                            Compras web
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a href="{{ route('clients.index') }}" class="nav-link {{ request()->is('clients') ? 'active' : '' }}">
+                        <i class="nav-icon far fa-user"></i>
+                        <p>
+                            Clientes
                         </p>
                     </a>
                 </li>

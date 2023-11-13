@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('order_images', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('last_name')->nullable();
-            $table->string('phone');
-            $table->string('address')->nullable();
-            $table->string('password');
-            $table->string('clave');
-            $table->text('observation')->nullable();
+            $table->string('image_url')->nullable();
+            $table->unsignedBigInteger('order_id');
+            $table->enum('type', ['payment', 'invoice','raffle'])->default('payment');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('order_images');
     }
 };

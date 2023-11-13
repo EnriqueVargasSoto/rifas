@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Raffle;
+use App\Models\RaffleImage;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RaffleController extends Controller
 {
@@ -14,11 +17,22 @@ class RaffleController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
-        $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser')->byStatus($request->query('status'))
-            ->bySearch($search)
-            ->paginate(20);
+        $is_visible_in_web = $request->query('is_visible_in_web','');
 
-        return view('intranet.pages.raffles.index', compact('raffles', 'search'));
+        $user_id_1 = $request->query('user_id_1');
+        $user_id_2 = $request->query('user_id_2');
+        $user_id_3 = $request->query('user_id_3');
+        $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser','raffleImages')
+            ->byStatus($request->query('status'))
+            ->byFirstUser($user_id_1)
+            ->bySecondUser($user_id_2)
+            ->byThirdUser($user_id_3)
+            ->byIsVisibleInWeb($is_visible_in_web)
+            ->bySearch($search)
+            ->paginate(12);
+
+        $users = User::orderBy('name', 'asc')->get();
+        return view('intranet.pages.raffles.index', compact('raffles', 'search', 'users', 'is_visible_in_web', 'user_id_1', 'user_id_2', 'user_id_3'));
     }
 
     /**
@@ -34,7 +48,66 @@ class RaffleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $raffle = new Raffle();
+            $raffle->status = "Stock";
+            $raffle->number = $request->input('number');
+            $raffle->code = $request->input('code');
+            $raffle->is_visible_in_web = $request->input('is_visible_in_web', 0);
+            $raffle->is_active = $request->input('is_active', 1);
+            $raffle->price = $request->input('price', 10);
+            $raffle->user_id_1 = $request->input('user_id_1');
+            $raffle->user_id_2 = $request->input('user_id_2');
+            $raffle->user_id_3 = $request->input('user_id_3');
+            $raffle->save();
+            return redirect()->route('rifas.index')->with('success', 'Rifa creada correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('rifas.index')->with('error', 'Error al crear la rifa: ' . $e->getMessage());
+        }
+    }
+
+
+    public function storeFile(Request $request)
+    {
+        try {
+            $request->validate([
+                'raffle_id' => 'required'
+            ]);
+
+            $raffle = Raffle::find($request->input('raffle_id'));
+            $raffleImage = $request->file('image');
+            $path = $raffleImage->store('/raffles');
+
+            $raffleImage = new RaffleImage();
+            $raffleImage->raffle_id = $raffle->id;
+            $raffleImage->image_url = $path;
+            $raffleImage->save();
+
+            return redirect()->route('rifas.index')->with('success', 'Imagen subida correctamente'); 
+
+        } catch (\Exception $e) {
+            return redirect()->route('rifas.index')->with('error', 'Error al subir imagen: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteFile(Request $request, $id)
+    {
+
+        try {
+
+            $raffleImage = RaffleImage::find($id);
+
+            if ($raffleImage->image_url) {
+                // Eliminar el archivo de almacenamiento
+                Storage::delete($raffleImage->image_url);
+            }
+
+            $raffleImage->delete();
+            return redirect()->route('rifas.index')->with('success', 'Imagen eliminada correctamente');
+
+        } catch (\Exception $e) {
+            return redirect()->route('rifas.index')->with('error', 'Error al eliminar imagen: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -58,7 +131,23 @@ class RaffleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $raffle = Raffle::find($id);
+            $raffle->status = $request->input('status');
+            $raffle->number = $request->input('number');
+            $raffle->code = $request->input('code');
+            $raffle->is_visible_in_web = $request->input('is_visible_in_web', 0);
+            $raffle->is_active = $request->input('is_active', 1);
+            $raffle->price = $request->input('price', 10);
+            $raffle->user_id_1 = $request->input('user_id_1');
+            $raffle->user_id_2 = $request->input('user_id_2');
+            $raffle->user_id_3 = $request->input('user_id_3');
+            $raffle->save();
+
+            return redirect()->route('rifas.index')->with('success', 'Rifa actualizada correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('rifas.index')->with('error', 'Error al actualizar la rifa: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -66,6 +155,13 @@ class RaffleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $raffle = Raffle::find($id);
+            $raffle->delete();
+
+            return redirect()->route('rifas.index')->with('success', 'Rifa eliminada correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('rifas.index')->with('error', 'Error al eliminar la rifa: ' . $e->getMessage());
+        }
     }
 }

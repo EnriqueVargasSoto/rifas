@@ -55,4 +55,17 @@ class User extends Authenticatable
     function role(){
         return $this->belongsTo(Role::class);
     }
+
+    public function scopeSearch($query,$term){
+        if($term){
+            return $query->orWhere('name','like','%'.$term.'%')
+            ->orWhere('dni','like','%'.$term.'%')
+            ->orWhere('short_name','like','%'.$term.'%')
+            ->orWhere('phone','like','%'.$term.'%')
+            ->orWhere('unit','like','%'.$term.'%')
+            ->orWhere('area','like','%'.$term.'%');
+        }
+
+        return $query;
+    }
 }

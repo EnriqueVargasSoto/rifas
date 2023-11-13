@@ -21,7 +21,7 @@ class RaffleController extends Controller
 
         $raffles = Raffle::byStatus("stock")
                            ->betweenNumber($start, $end)
-                           ->byVisibilityWeb(1)
+                           ->byIsVisibleInWeb(1)
                            ->bySearch($search) 
                            ->whereNotIn('id', $rafflesInCart)
                            ->paginate(20);

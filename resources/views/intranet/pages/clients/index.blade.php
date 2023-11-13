@@ -5,15 +5,14 @@
     <div class="col-xl-12">
         <div class="card dz-card" id="accordion-four">
             <div class="card-header">
-                <div class="w-100 d-flex justify-content-between">
-                    <h3 class="card-title">Lista de Responsables</h3>
 
+                <div class="w-100 d-flex justify-content-between">
+                    <h3 class="card-title">Lista de clientes</h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"><i
-                                class="fa-solid fa fa-plus mx-2"></i>Nuevo Responsable</button>
                     </div>
                 </div>
-                <form action="{{ route('users.index') }}" method="GET">
+
+                <form action="{{ route('clients.index') }}" method="GET">
                     <div class="row mt-3">
                         <div class="col-md-3 mb-3">
                             <label for="search">Buscar </label>
@@ -28,7 +27,7 @@
 
                         </div>
                         <div class="col-md-2 mt-4">
-                            <a href="{{ route('users.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i>
+                            <a href="{{ route('clients.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i>
                                 Restabler filtros</a>
                         </div>
                     </div>
@@ -47,30 +46,26 @@
                                     <tr>
                                         <th style="width: 15px">#</th>
                                         <th>Nombres</th>
-                                        <th>Rol</th>
-                                        <th>Email</th>
-                                        <th>Teléfono</th>
-                                        <th>Unidad</th>
-                                        <th>Área</th>
-                                        <th>Posición</th>
+                                        <th>Telefono</th>
+                                        <th>Direccion</th>
                                         <th style="width:25px">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $key => $item)
+                                    @foreach ($clients as $key => $item)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->role->role }}</td>
-                                            <td>{{ $item->email }}</td>
                                             <td>{{ $item->phone }}</td>
-                                            <td>{{ $item->unit }}</td>
-                                            <td>{{ $item->area }}</td>
-                                            <td>{{ $item->position }}</td>
+                                            <td>{{ $item->address }}</td>
                                             <td style="width:40px">
-                                                <button type="button" class="btn btn-info" data-toggle="modal"
+                                                <i role="button"  data-toggle="modal"
                                                     data-target="#basicModalEdit{{ $item->id }}"><i
-                                                        class="fa-solid fa fa-pen"></i></button>
+                                                        class="fa-solid fa fa-pen"></i></i>
+
+                                                <a href="">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                </a>
                                                 {{-- <a href="{{route('serials.destroy', $item->id)}}" class="btn btn-danger"><i class="fa-solid fa-trash me-2"></i>Eliminar</a> --}}
                                             </td>
                                         </tr>
@@ -83,11 +78,11 @@
 
                         <div class="d-flex justify-content-between">
                             <div class="mt-2">
-                                <p>Mostrando {{ $users->firstItem() }} a {{ $users->lastItem() }} de
-                                    {{ $users->total() }} registros</p>
+                                <p>Mostrando {{ $clients->firstItem() }} a {{ $clients->lastItem() }} de
+                                    {{ $clients->total() }} registros</p>
                             </div>
 
-                            {{ $users->appends(['search' => $search])->links() }}
+                            {{ $clients->appends(['search' => $search])->links() }}
                         </div>
                     </div>
                 </div>
@@ -104,46 +99,33 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
-                    <h5 class="modal-title">Crear Nuevo Responsable</h5>
+                    <h5 class="modal-title">Crear Nuevo Cliente</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('users.store') }}" method="post" id="formCreateUser">
+                <form action="{{ route('clients.store') }}" method="post" id="formCreateClient">
                     @csrf
                     <div class="modal-body">
-
                         <div class="row">
                             <div class="mb-3 col-md-6">
-
                                 <div class="form-group">
                                     <label for="">
-                                        Nombres Completos
+                                        Nombre
                                     </label>
                                     <input type="text" name="name" class="form-control input-default ">
                                 </div>
-
                             </div>
                             <div class="mb-3 col-md-6">
                                 <div class="form-group">
                                     <label for="">
-                                        DNI
+                                        Apellidos
                                     </label>
-                                    <input type="text" name="dni" class="form-control input-default ">
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Nombre Corto
-                                    </label>
-
-                                    <input type="text" name="short_name" class="form-control input-default ">
+                                    <input type="text" name="last_name" class="form-control input-default ">
                                 </div>
                             </div>
+
+
                             <div class="mb-3 col-md-6">
                                 <div class="form-group">
                                     <label for="">
@@ -153,56 +135,31 @@
                                 </div>
 
                             </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group">
+                                    <label for="">
+                                        Direccion
+                                    </label>
+                                    <input type="text" name="address" class="form-control input-default">
+                                </div>
+
+                            </div>
                         </div>
 
-                        <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Unidad
-                                    </label>
-                                    <input type="text" name="unit" class="form-control input-default ">
-                                </div>
 
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Área
-                                    </label>
-                                    <input type="text" name="area" class="form-control input-default ">
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Posición
-                                    </label>
-                                    <input type="text" name="position" class="form-control input-default ">
-                                </div>
-
-                            </div>
                             <div class="mb-3 col-md-6">
                                 <div class="form-group">
                                     <label for="">
                                         Contraseña
                                     </label>
-                                    <input type="text" name="password" class="form-control input-default ">
+                                    <input type="text" name="password" class="form-control input-default">
                                 </div>
 
                             </div>
                         </div>
                         <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Email
-                                    </label>
-                                    <input type="text" name="email" class="form-control input-default">
-                                </div>
-                            </div>
+
                             <div class="mb-3 col-md-12">
                                 <div class="form-group">
                                     <label for="">
@@ -223,20 +180,19 @@
         </div>
     </div>
 
-    @foreach ($users as $item)
+    @foreach ($clients as $item)
         <!-- Modal -->
         <div class="modal fade" id="basicModalEdit{{ $item->id }}">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Editar Responsable</h5>
+                        <h5 class="modal-title">Editar cliente</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
                     <form action="{{ route('users.update', $item->id) }}" method="post"
-                        id="formUpdateUser{{ $item->id }}">
+                        id="formUpdateClient{{ $item->id }}">
                         @method('PUT')
                         @csrf
                         <div class="modal-body">
@@ -244,27 +200,22 @@
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
-                                        <label for="">Nombres completos</label>
+                                        <label for="">Nombre</label>
                                         <input type="text" name="name" class="form-control input-default"
-                                            value="{{ $item->name }}" placeholder="Ingrese Nombres Completos">
+                                            value="{{ $item->name }}">
                                     </div>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
-                                        <h4 class="card-title">DNI</h4>
-                                        <input type="text" name="dni" class="form-control input-default"
-                                            value="{{ $item->dni }}">
+                                        <label for="">Apellidos</label>
+                                        <input type="text" name="last_name" class="form-control input-default"
+                                            value="{{ $item->last_name }}">
                                     </div>
                                 </div>
+
                             </div>
                             <div class="row">
-                                <div class="mb-3 col-md-6">
-                                    <div class="form-group">
-                                        <h4 class="card-title">Nombre Corto</h4>
-                                        <input type="text" name="short_name" class="form-control input-default"
-                                            value="{{ $item->short_name }}">
-                                    </div>
-                                </div>
+
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
 
@@ -274,46 +225,16 @@
                                             value="{{ $item->phone }}">
                                     </div>
                                 </div>
+
+                                
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
-
-
-                                        <h4 class="card-title">Correo</h4>
-                                        <input type="text" name="email" class="form-control input-default"
-                                            value="{{ $item->email }}">
+                                        <h4 class="card-title">Direccion</h4>
+                                        <input type="text" name="address" class="form-control input-default"
+                                            value="{{ $item->address }}">
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="mb-3 col-md-6">
-                                    <div class="form group">
-
-
-                                        <h4 class="card-title">Unidad</h4>
-                                        <input type="text" name="unit" class="form-control input-default"
-                                            value="{{ $item->unit }}">
-                                    </div>
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <div class="form-group">
-
-
-                                        <h4 class="card-title">Área</h4>
-                                        <input type="text" name="area" class="form-control input-default"
-                                            value="{{ $item->area }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-3 col-md-6">
-                                    <div class="form-group">
-                                        <h4 class="card-title">Posición</h4>
-                                        <input type="text" name="position" class="form-control input-default"
-                                            value="{{ $item->position }}">
-                                    </div>
-
-                                </div>
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
                                         <h4 class="card-title">Password</h4>
@@ -321,24 +242,10 @@
                                             value="{{ $item->clave }}">
                                     </div>
                                 </div>
-                                <div class="mb-3 col-md-6">
-                                    <div class="form-group">
-                                        <h4 class="card-title">Mostrar informacion en la web</h4>
-
-                                        <select name="show_information_in_web" class="form-control input-default">
-                                            <option value="">Seleccione</option>
-                                            <option value="1" {{ $item->show_information_in_web == 1 ? 'selected' : '' }}>
-                                                Si</option>
-                                            <option value="0" {{ $item->show_information_in_web == 0 ? 'selected' : '' }}>
-                                                No</option>
-                                        </select>
-                                    </div>
+                                <div class="mb-3 col-md-12">
+                                    <h4 class="card-title">Observación</h4>
+                                    <textarea name="observation" class="form-control input-default " id="" rows="3">{{ $item->observation }}</textarea>
                                 </div>
-
-                            </div>
-                            <div class="mb-3 col-md-12">
-                                <h4 class="card-title">Observación</h4>
-                                <textarea name="observation" class="form-control input-default " id="" rows="3">{{ $item->observation }}</textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -359,68 +266,38 @@
             $.validator.setDefaults({
                 submitHandler: function() {
                     // submit form
-                    $('#formCreateUser').submit();
+                    $('#formCreateClient').submit();
                 }
             });
-            $('#formCreateUser').validate({
+            $('#formCreateClient').validate({
                 rules: {
                     name: {
                         required: true,
                     },
-                    dni: {
-                        required: true,
-                    },
-                    short_name: {
+                    last_name: {
                         required: true,
                     },
                     phone: {
                         required: true,
                     },
-                    unit: {
-                        required: true,
-                    },
-                    area: {
-                        required: true,
-                    },
-                    position: {
-                        required: true,
-                    },
                     password: {
                         required: true,
-                    },
-                    email: {
-                        required: true,
                     }
-
                 },
                 messages: {
                     name: {
                         required: "Por favor ingrese un nombre",
                     },
-                    dni: {
-                        required: "Por favor ingrese un dni",
-                    },
-                    short_name: {
-                        required: "Por favor ingrese un nombre corto",
+                    last_name: {
+                        required: "Por favor ingrese un apellido",
                     },
                     phone: {
                         required: "Por favor ingrese un teléfono",
                     },
-                    unit: {
-                        required: "Por favor ingrese una unidad",
-                    },
-                    area: {
-                        required: "Por favor ingrese un área",
-                    },
-                    position: {
-                        required: "Por favor ingrese una posición",
-                    },
                     password: {
-                        required: "Por favor ingrese un password",
-                    },
-                    email: {
-                        required: "Por favor ingrese un email",
+                        required: "Por favor ingrese una contraseña",
                     }
+
                 },
                 errorElement: 'span',
                 errorPlacement: function(error, element) {
@@ -437,42 +314,27 @@
         });
     </script>
 
-    @foreach ($users as $user)
+    @foreach ($clients as $client)
         <script>
             $(function() {
                 $.validator.setDefaults({
                     submitHandler: function() {
                         // submit form
-                        $('#formUpdateUser' + {{ $user->id }}).submit();
+                        $('#formUpdateClient' + {{ $client->id }}).submit();
                     }
                 });
-                $('#formUpdateUser' + {{ $user->id }}).validate({
+                $('#formUpdateClient' + {{ $client->id }}).validate({
                     rules: {
                         name: {
                             required: true,
                         },
-                        dni: {
-                            required: true,
-                        },
-                        short_name: {
+                        last_name: {
                             required: true,
                         },
                         phone: {
                             required: true,
                         },
-                        unit: {
-                            required: true,
-                        },
-                        area: {
-                            required: true,
-                        },
-                        position: {
-                            required: true,
-                        },
                         password: {
-                            required: true,
-                        },
-                        email: {
                             required: true,
                         }
 
@@ -481,29 +343,14 @@
                         name: {
                             required: "Por favor ingrese un nombre",
                         },
-                        dni: {
-                            required: "Por favor ingrese un dni",
-                        },
-                        short_name: {
-                            required: "Por favor ingrese un nombre corto",
+                        last_name: {
+                            required: "Por favor ingrese un apellido",
                         },
                         phone: {
                             required: "Por favor ingrese un teléfono",
                         },
-                        unit: {
-                            required: "Por favor ingrese una unidad",
-                        },
-                        area: {
-                            required: "Por favor ingrese un área",
-                        },
-                        position: {
-                            required: "Por favor ingrese una posición",
-                        },
                         password: {
-                            required: "Por favor ingrese un password",
-                        },
-                        email: {
-                            required: "Por favor ingrese un email",
+                            required: "Por favor ingrese una contraseña",
                         }
                     },
                     errorElement: 'span',

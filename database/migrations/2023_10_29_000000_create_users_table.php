@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('clave');
             $table->string('observation')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('show_information_in_web')->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

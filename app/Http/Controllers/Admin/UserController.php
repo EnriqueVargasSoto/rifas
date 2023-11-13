@@ -11,11 +11,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $users = User::get();
-        return view('intranet.pages.users.index', compact(['users']));
+        $search =  $request->query('search');
+        $users = User::search($search)->paginate(12);
+        return view('intranet.pages.users.index', compact('users', 'search'));
     }
 
     /**
@@ -71,8 +72,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $user = User::find($id);
-
+            $user = User::find($id);
             $user->name = $request->name;
             $user->dni  = $request->dni;
             $user->short_name = $request->short_name;
@@ -84,8 +84,12 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->clave = $request->password;
             $user->observation = $request->observation;
+            $user->show_information_in_web = $request->input('show_information_in_web',0);
+            $user->save();
 
-        $user->save();
+            if($user->show_information_in_web==1){
+                User::where('id','!=',$user->id)->update(['show_information_in_web'=>0]);
+            }
 
         return back();
     }

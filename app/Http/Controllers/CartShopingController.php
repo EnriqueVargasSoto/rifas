@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Raffle;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -17,6 +18,11 @@ class CartShopingController extends Controller
 
     public function index()
     {
+        if(!auth()->guard('client')->check()){
+            return redirect()->route('login-client-view')->with('error-login', 'Debe iniciar sesión para poder comprar');
+        }
+
+        $userInformation = User::where('show_information_in_web',1)->first();
         // Recupera los productos almacenados en la sesión
         $cartItems = session('cart', []);
         $raffles = Raffle::whereIn('id', $cartItems)->get();
@@ -24,11 +30,15 @@ class CartShopingController extends Controller
         // Calcula el total utilizando el método sum
         $total = $raffles->sum('price');
 
-        return view('cart', compact('cartItems', 'raffles', 'total'));
+        return view('cart', compact('cartItems', 'raffles', 'total','userInformation'));
     }
 
     public function addItem(Request $request)
     {
+        if(!auth()->guard('client')->check()){
+            return redirect()->route('register-client')->with('error-login', 'Debe iniciar sesión para poder comprar');
+        }
+
         $productId = $request->input('id');
 
         // Recupera los productos almacenados en la sesión
@@ -51,6 +61,10 @@ class CartShopingController extends Controller
 
     public function removeItem($id)
     {
+        if(!auth()->guard('client')->check()){
+            return redirect()->route('register-client')->with('error-login', 'Debe iniciar sesión para continuar');
+        }
+
         // Recupera los productos almacenados en la sesión
         $cartItems = session('cart', []);
 
@@ -78,14 +92,11 @@ class CartShopingController extends Controller
 
     public function checkout(Request $request)
     {
+        if(!auth()->guard('client')->check()){
+            return redirect()->route('login-client-view')->with('error-login', 'Debe iniciar sesión para continuar');
+        }
 
         try {
-            $request->validate([
-                'name' => 'required',
-                'last_name' => 'required',
-                'identity_number' => 'required',
-                'phone' => 'required'
-            ]);
 
             DB::beginTransaction();
 
@@ -93,38 +104,22 @@ class CartShopingController extends Controller
             $raffles = Raffle::whereIn('id', $shoppingCartItems)->get();
             $total = $raffles->sum('price');
 
-
             if(!$raffles->count()){
                 return redirect()->route('cart.index')->with('error-checkout', 'No hay productos en el carrito')->withInput();
             }
 
-            $pathImage = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = Str::uuid() . $image->getClientOriginalName();
-                $pathImage = "images/payments/" . $imageName;
-                Storage::put($pathImage, file_get_contents($image));
+            $imagePaymentPath='';
+            if($request->hasFile('image')){
+                $imagePaymentPath = $request->file('image')->store('orders/payment');
             }
 
-            // Verifica si el cliente ya existe en la base de datos por su número de identidad
-            $client = Client::where('identity_number', $request->input('identity_number'))->first();
-            if (!$client) {
-                $client = new Client();
-                $client->name = $request->input('name');
-                $client->last_name = $request->input('last_name');
-                $client->identity_number = $request->input('identity_number');
-                $client->phone = $request->input('phone');
-                $client->email = $request->input('email');
-                $client->address = $request->input('address');
-                $client->save();
-            }
 
-            // Guarda el cliente en la base de datos si no existe 
             $order = new Order();
-            $order->client_id = $client->id;
+            $order->client_id = auth()->guard('client')->user()->id;
             $order->total = $total;
-            $order->payment_method = $request->input('payment_method');
-            $order->image_payment_url = $pathImage;
+            $order->payment_method = $request->input('payment_method',"Yape");
+            $order->image_payment_url = $imagePaymentPath;
+            $order->transaction_id = $request->input('transaction_code');
             $order->status = 'reservado';
             $order->save();
 
@@ -137,19 +132,18 @@ class CartShopingController extends Controller
                 $orderItem->total = $raffle->price;
                 $orderItem->status = 'reservado';
                 $orderItem->save();
-
                 // Actualiza el estado de la rifa a reservado y le asigna el id del item de la orden
                 $raffle->status = 'Reservada';
                 $raffle->order_item_id = $orderItem->id;
                 $raffle->order_id = $order->id;
+                $raffle->reserved_at = now();
                 $raffle->save();
             }
 
             // Elimina los productos del carrito
             session(['cart' => []]);
             DB::commit();
-
-
+            
             return redirect()->route('cart.index')->with('success-checkout', 'Compra realizada con éxito puede ver el estado de su compra en la sección de mis compras');
         } catch (\Exception $e) {
             DB::rollBack();
