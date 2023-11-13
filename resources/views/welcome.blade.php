@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <div class="w-100 my-3">
+        {{-- <div class="w-100 my-3">
             <form action="{{ route('welcome') }}" method="GET">
                 <label for="">
                     Buscar por un rango de números
@@ -14,7 +14,7 @@
                 </div>
             </form>
 
-        </div>
+        </div> --}}
         @if (session('success-add-cart'))
             <div class="alert alert-success">
                 {{ session('success-add-cart') }}

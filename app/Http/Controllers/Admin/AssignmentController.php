@@ -36,6 +36,7 @@ class AssignmentController extends Controller
             if($request->input('is_visible_in_web')=="si" || $request->input('is_visible_in_web')=="no"){
                 $isVisibleInWeb = $request->input('is_visible_in_web')=="si"?1:0;
             }
+            
             $assignment->is_visible_in_web = $isVisibleInWeb;
             $assignment->save();
 

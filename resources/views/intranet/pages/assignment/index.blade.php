@@ -43,6 +43,7 @@
                                         <th>Inicio</th>
                                         <th>Fin</th>
                                         <th>Numeros</th>
+                                        <th>Visible en web</th>
                                         <th>Fecha</th>
                                     </tr>
                                 </thead>
@@ -56,6 +57,7 @@
                                             <td>{{ $assignment->start }}</td>
                                             <td>{{ $assignment->end }}</td>
                                             <td>{{ $assignment->codes }}</td>
+                                            <td>@if($assignment->is_visible_in_web==1) Si @elseif($assignment->is_visible_in_web==0) No @else @endif  </td>
                                             <td>{{ $assignment->created_at->format('d/m/Y') }}</td>
 
                                         </tr>
