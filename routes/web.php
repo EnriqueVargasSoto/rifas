@@ -12,6 +12,8 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RaffleController as RaffleControllerPublic;
 use App\Http\Controllers\Client\LoginClientController;
 use App\Models\Raffle;
+use Illuminate\Support\Facades\Artisan;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -64,4 +66,15 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('orders', OrderController::class);
     Route::resource('clients', ClientController::class);
     Route::resource('payments', PaymentController::class);
+});
+
+
+Route::get('storage-link', function () {
+    Artisan::call('storage:link');
+    return 'success';
+});
+
+Route::get('optimize-clear', function () {
+    Artisan::call('optimize:clear');
+    return 'success';
 });
