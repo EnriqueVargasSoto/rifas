@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image_payment_url')->nullable();
             $table->string('invoice_url')->nullable();
             $table->enum('status',['reservado','aprobado', 'cancelado'])->default('reservado');
+            $table->text('rejection_reason')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

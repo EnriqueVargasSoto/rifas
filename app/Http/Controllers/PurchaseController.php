@@ -12,6 +12,10 @@ class PurchaseController extends Controller
     //
     public function index(Request $request)
     {
+        if(!auth()->guard('client')->check()){
+            return redirect()->route('welcome');
+        }
+
         $orders = Order::with('order_items.raffle','order_images')->where('client_id', auth()->guard('client')->user()->id)->get();
         $client = auth()->guard('client')->user();
         return view('purchases', compact('orders', 'client'));

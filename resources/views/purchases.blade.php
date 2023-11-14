@@ -26,7 +26,7 @@
                     </h4>
                     @if ($order->status == 'reservado')
                         <span class="badge badge-warning">Su compra se encuentra procesando</span>
-                    @elseif($order->status == 'aprovado')
+                    @elseif($order->status == 'aprobado')
                         <span class="badge badge-success">Su compra a sido aprobada</span>
                     @elseif($order->status == 'cancelado')
                         <span class="badge badge-danger">Su compra a sido cancelada</span>
@@ -167,6 +167,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
+                                @if($order->image_payment_url)
                                 <div class="col-md-4 text-center">
                                     <div class="container-image text-center">
                                         <div class="image text-center" onclick="showImage(this)">
@@ -181,6 +182,7 @@
                                         <input type="submit" value="Eliminar" class="btn btn-danger btn-block mt-2">
                                     </form> --}}
                                 </div>
+                                @endif
 
                                 @foreach ($order->order_images as $image)
                                     @if ($image->type == 'payment')

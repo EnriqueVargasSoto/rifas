@@ -45,14 +45,16 @@
                             <div class="row mt-3">
                                 <!-- /.col -->
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary btn-block">Iniciar sesion</button>
+                                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
                                 </div>
                                 <!-- /.col -->
                             </div>
+
+                            <small class="text-center">Si olvidaste tu contraseña solicitalo al WhatsApp</small>
+
+
                         </form>
                         <p class="mb-0 mt-5">
-                            <a href="{{ route('register-client') }}" class="text-center">No tengo una cuenta deseo
-                                registrarme</a>
                         </p>
                     </div>
                     <!-- /.card-body -->

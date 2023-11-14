@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom shadow-sm fixed-top">
-    <a class="navbar-brand" href="#">Sentimiento amazonico</a>
+    <a class="navbar-brand" href="#">Sentimiento Amazonense</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03"
         aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

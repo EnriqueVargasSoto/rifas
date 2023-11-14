@@ -59,13 +59,13 @@
                                             <td>{{ $item->phone }}</td>
                                             <td>{{ $item->address }}</td>
                                             <td style="width:40px">
-                                                <i role="button"  data-toggle="modal"
+                                                <i role="button" data-toggle="modal"
                                                     data-target="#basicModalEdit{{ $item->id }}"><i
                                                         class="fa-solid fa fa-pen"></i></i>
 
-                                                <a href="">
+                                                {{-- <a href="">
                                                     <i class="fa fa-shopping-cart"></i>
-                                                </a>
+                                                </a> --}}
                                                 {{-- <a href="{{route('serials.destroy', $item->id)}}" class="btn btn-danger"><i class="fa-solid fa-trash me-2"></i>Eliminar</a> --}}
                                             </td>
                                         </tr>
@@ -226,7 +226,7 @@
                                     </div>
                                 </div>
 
-                                
+
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
                                         <h4 class="card-title">Direccion</h4>

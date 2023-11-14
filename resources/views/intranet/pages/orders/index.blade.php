@@ -73,7 +73,7 @@
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
                                             <td class="text-center">
-                                                <div class="badge badge-{{ $item->status == 'reservado' ? 'warning' : '' }}{{ $item->status == 'aprovado' ? 'success' : '' }}{{ $item->status == 'cancelado' ? 'danger' : '' }}"
+                                                <div class="badge badge-{{ $item->status == 'reservado' ? 'warning' : '' }}{{ $item->status == 'aprobado' ? 'success' : '' }}{{ $item->status == 'cancelado' ? 'danger' : '' }}"
                                                     data-toggle="modal"
                                                     data-target="#basicModalStatusOrder{{ $item->id }}">
                                                     {{ $item->status }}
@@ -115,36 +115,85 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="POST" enctype="multipart/form-data"
+                        <form action="{{route('orders.changeStatus')}}" method="POST" enctype="multipart/form-data"
                             id="changeOrderStatus{{ $item->id }}">
                             @method('POST')
                             @csrf
-
+                            <input type="hidden" name="order_id" value="{{$item->id}}">
                             <div class="form-group">
                                 <label for="status">Estado</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option value="reservado" {{ $item->status == 'reservado' ? 'selected' : '' }}>
-                                        Reservado
-                                    </option>
-                                    <option value="aprovado" {{ $item->status == 'aprovado' ? 'selected' : '' }}>Aprovado
+                                <select name="status" class="form-control" onchange="selectStatus(this)"
+                                    value="{{ $item->status }}">
+                                    <option value="">-- Seleccione -- </option>
+                                    <option value="aprobado" {{ $item->status == 'aprobado' ? 'selected' : '' }}>Aprobar
                                     </option>
                                     <option value="cancelado" {{ $item->status == 'cancelado' ? 'selected' : '' }}>
-                                        Cancelado
+                                        Cancelar
                                     </option>
                                 </select>
                             </div>
+
+                            <div class="w-100 d-none" id="containerAprovedOrder">
+                                <div class="form-group">
+                                    <label for="">
+                                        Codigo de transacción
+                                    </label>
+                                    <input type="text" name="transaction_id" class="form-control"
+                                        value="{{ $item->transaction_id }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        Fecha de pago
+                                    </label>
+                                    <input type="date" name="payment_at" id="payment_at" class="form-control"
+                                        value="{{ now()->format('Y-m-d') }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">
+                                        Monto de pago
+                                    </label>
+                                    <input type="number" name="amount_paid" id="amount_paid" class="form-control"
+                                        value="{{ $item->total }}">
+                                </div>
+                            </div>
+
+                            <div class="w-100 d-none" id="containerCancelOrder">
+                                <label for="">
+                                    Motivo de cancelación
+                                </label>
+                                <textarea name="rejection_reason" id="reason" cols="30" rows="5" class="form-control"
+                                    id="rejection_reason{{ $item->id }}"></textarea>
+                            </div>
+
+                            <div class="w-100 d-flex justify-content-end my-3">
+                                <button type="button" class="btn btn-danger light mx-2" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </div>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
-                    </div>
+
                 </div>
             </div>
         </div>
     @endforeach
 @endsection
 @section('scripts')
+    <script>
+        function selectStatus(e) {
+            const status = e.value;
+            if (status == 'aprobado') {
+                document.getElementById('containerAprovedOrder').classList.remove('d-none');
+                document.getElementById('containerCancelOrder').classList.add('d-none');
+            } else if (status == 'cancelado') {
+                document.getElementById('containerAprovedOrder').classList.add('d-none');
+                document.getElementById('containerCancelOrder').classList.remove('d-none');
+            } else {
+                document.getElementById('containerAprovedOrder').classList.add('d-none');
+                document.getElementById('containerCancelOrder').classList.add('d-none');
+            }
+        }
+    </script>
     @foreach ($orders as $order)
         <script>
             $(function() {
@@ -156,14 +205,14 @@
                 });
                 $('#changeOrderStatus' + {{ $order->id }}).validate({
                     rules: {
-                        image: {
+                        status: {
                             required: true,
                         }
                     },
                     messages: {
-                        image: {
-                            required: "Por favor seleccione una imagen"
-                        },
+                        status: {
+                            required: "Por favor seleccione un estado",
+                        }
                     },
                     errorElement: 'span',
                     errorPlacement: function(error, element) {

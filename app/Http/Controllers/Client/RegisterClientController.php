@@ -26,9 +26,13 @@ class RegisterClientController extends Controller
 
             $emailRegistred = Client::where('phone', $request->input('phone'))->first();
             if ($emailRegistred) {
-                return back()->withErrors([
-                    'phone' => 'Ya existe un usuario registrado con este número de teléfono'
-                ])->withInput();
+                $credentials = $request->only('phone', 'password');
+                if (auth()->guard('client')->attempt($credentials)) {
+                    $request->session()->regenerate();
+                    return redirect()->intended('/')->with('success', 'Bienvenido');
+                }
+
+                return back()->with('error', 'Usuario o contraseña incorrectos');
             }
 
             $client = new Client();
@@ -40,7 +44,13 @@ class RegisterClientController extends Controller
             $client->clave = $request->input('password');
             $client->save();
 
-            return redirect()->route('login-client')->with('success', 'Registro exitoso');
+            $credentials = $request->only('phone', 'password');
+            if (auth()->guard('client')->attempt($credentials)) {
+                $request->session()->regenerate();
+                return redirect()->intended('/')->with('success', 'Bienvenido');
+            }
+
+            
         } catch (\Exception $e) {
             return back()->with('error', 'Error al registrar' . $e->getMessage());
         }
@@ -67,7 +77,7 @@ class RegisterClientController extends Controller
             $client->last_name = $request->input('last_name');
             $client->phone = $request->input('phone');
             $client->address = $request->input('address');
-            if($request->input('password')){
+            if ($request->input('password')) {
                 $client->password = bcrypt($request->input('password'));
                 $client->clave = $request->input('password');
             }

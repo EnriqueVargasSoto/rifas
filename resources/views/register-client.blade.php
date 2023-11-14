@@ -18,7 +18,7 @@
                             @csrf
                           
                             <div class="input-group mb-4">
-                                <input type="text" class="form-control" name="phone" placeholder="Teléfono" value="{{ old('phone') }}" onchange="changeNumberPhone(this)">
+                                <input type="text" class="form-control" name="phone" placeholder="Teléfono" onchange="changeNumberPhone(this)">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-phone"></span>
@@ -41,14 +41,12 @@
                             <div class="row mt-3">
                                 <!-- /.col -->
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary btn-block">Registrarme</button>
+                                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
                                 </div>
                                 <!-- /.col -->
                             </div>
+                            <small class="text-center">Si olvidaste tu contraseña solicitalo al WhatsApp</small>
                         </form>
-                        <p class="mb-0 mt-5 text-center">
-                            <a href="{{ route('login-client-view') }}" class="text-center">Ya tengo una cuenta. Iniciar sesión</a>
-                        </p>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -99,17 +97,17 @@
             }
         });
     });
-
-    function changeNumberPhone(elementHtml){
-        const value = elementHtml.target.value;
+                         
+    function changeNumberPhone(elementHtml) {
+        const value = elementHtml.value;
         const valueWithoutSpaces = value.replace(/\s/g, '');
-        elementHtml.target.value = valueWithoutSpaces;
+        elementHtml.value = valueWithoutSpaces;
         // obtener los primeros 4 caracteres
         const firstFourCharacters = valueWithoutSpaces.substring(0, 4);
-        if(firstFourCharacters.length == 4){
+        if (firstFourCharacters.length == 4) {
             const passwordElement = document.getElementById('passwordRegister');
             const passwordValue = passwordElement.value;
-            if(passwordValue.length<=4){
+            if (passwordValue.length <= 4) {
                 passwordElement.value = firstFourCharacters;
             }
         }

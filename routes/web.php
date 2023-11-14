@@ -61,7 +61,9 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::get('assignaciones', [AssignmentController::class, 'index'])->name('assignaciones.index');
     Route::post('assignaciones', [AssignmentController::class, 'store'])->name('assignaciones.store');
 
+    Route::post('/orders/change-status', [OrderController::class, 'changeStatus'])->name('orders.changeStatus');
     Route::post('/orders/store-file', [OrderController::class, 'storeFile'])->name('orders.storeFiles');
+    Route::post('/orders/store-payment', [OrderController::class, 'storePayment'])->name('orders.storePayment');
     Route::delete('/orders/delete-file/{id}', [OrderController::class, 'deleteFile'])->name('orders.deleteFile');
     Route::resource('orders', OrderController::class);
     Route::resource('clients', ClientController::class);

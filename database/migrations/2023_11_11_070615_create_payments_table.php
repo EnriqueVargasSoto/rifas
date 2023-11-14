@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('transaction_id')->nullable();
             $table->unsignedBigInteger('client_id')->nullable();
             $table->unsignedBigInteger('order_id')->nullable();
-            $table->unsignedBigInteger('raffle_id');
-            $table->date('payment_at')->nullable();
+            $table->unsignedBigInteger('raffle_id')->nullable();
             $table->decimal('total', 10, 2)->default(0);
             $table->string('image_payment_url')->nullable();
+            $table->enum('model', ['order', 'raffle']);
+            $table->dateTime('payment_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

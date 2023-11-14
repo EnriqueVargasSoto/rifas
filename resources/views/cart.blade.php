@@ -12,7 +12,7 @@
                     <p>Responsable: {{ $userInformation ? $userInformation->name : 'Eber Regalado' }}</p>
                     <p>Yape: <span id="numeroTelefono">{{ $userInformation ? $userInformation->phone : '924 061 643' }}
                         </span>
-                        <i class="fa fa-copy" onclick="copiarNumero()"></i>
+                        <span style="cursor: pointer" onclick="copiarNumero()"> <small> <i class="fa fa-copy" ></i> Copiar</small></span>
                     </p>
                 </div>
             </div>
@@ -69,7 +69,7 @@
 
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Total</span>
-                        <strong>{{ $total }}</strong>
+                        <strong>{{ number_format($total, 2) }}</strong>
                     </li>
                 </ul>
 
@@ -81,7 +81,7 @@
                                 <label for="">
                                     Codigo de transacción
                                 </label>
-                                <input type="text" name="transaction_code" class="form-control" required>
+                                <input type="text" name="transaction_code" class="form-control" >
                             </div>
                         </div>
 
@@ -90,7 +90,7 @@
                                 <label for="">
                                     Imagen de pago
                                 </label>
-                                <input type="file" name="image" class="form-control" required accept="image/*"
+                                <input type="file" name="image" class="form-control"  accept="image/*"
                                     onchange="onSelectImage(this)">
                             </div>
                         </div>
@@ -149,59 +149,4 @@
                 }
             }
         </script>
-
-<script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-<script>
-    $(function() {
-        $.validator.setDefaults({
-            submitHandler: function() {
-                $('#formCheckout').submit();
-            }
-        });
-        $('#formCheckout').validate({
-            rules: {
-                transaction_code: {
-                    required: true,
-                },
-                image: {
-                    required: true
-                }
-            },
-            messages: {
-                transaction_code: {
-                    required: "Por favor ingrese el codigo de transacción",
-                },
-                image: {
-                    required: "Por favor seleccione una imagen de pago",
-                }
-            },
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-            }
-        });
-    });
-
-    function changeNumberPhone(elementHtml){
-        const value = elementHtml.target.value;
-        const valueWithoutSpaces = value.replace(/\s/g, '');
-        elementHtml.target.value = valueWithoutSpaces;
-        // obtener los primeros 4 caracteres
-        const firstFourCharacters = valueWithoutSpaces.substring(0, 4);
-        if(firstFourCharacters.length == 4){
-            const passwordElement = document.getElementById('passwordRegister');
-            const passwordValue = passwordElement.value;
-            if(passwordValue.length<=4){
-                passwordElement.value = firstFourCharacters;
-            }
-        }
-    }
-</script>
     @endsection
