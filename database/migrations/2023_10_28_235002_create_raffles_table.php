@@ -26,8 +26,11 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id_3')->nullable();
             $table->unsignedBigInteger('order_item_id')->nullable();
             $table->unsignedBigInteger('order_id')->nullable();
-            $table->unsignedBigInteger('invoice_id')->nullable();
-            $table->unsignedBigInteger('invoice_item_id')->nullable();
+            $table->text('transaction_id')->nullable();
+            $table->text('transaction_liquidation_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->dateTime('liquidation_at')->nullable();
+            $table->dateTime('payment_at')->nullable();
             $table->dateTime('reserved_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

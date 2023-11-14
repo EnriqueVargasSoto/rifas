@@ -141,7 +141,7 @@
                                     <input type="text" name="transaction_id" class="form-control"
                                         value="{{ $item->transaction_id }}">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group d-none">
                                     <label for="">
                                         Fecha de pago
                                     </label>
@@ -149,7 +149,7 @@
                                         value="{{ now()->format('Y-m-d') }}">
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group d-none">
                                     <label for="">
                                         Monto de pago
                                     </label>

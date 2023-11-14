@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('transaction_id')->nullable();
             $table->string('image_payment_url')->nullable();
             $table->string('invoice_url')->nullable();
+            $table->unsignedBigInteger('aproved_by')->nullable();
+            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->dateTime('aproved_at')->nullable();
+            $table->dateTime('cancelled_at')->nullable();
             $table->enum('status',['reservado','aprobado', 'cancelado'])->default('reservado');
             $table->text('rejection_reason')->nullable();
             $table->timestamps();

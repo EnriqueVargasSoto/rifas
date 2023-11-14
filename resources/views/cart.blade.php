@@ -14,6 +14,34 @@
                         </span>
                         <span style="cursor: pointer" onclick="copiarNumero()"> <small> <i class="fa fa-copy" ></i> Copiar</small></span>
                     </p>
+
+
+                </div>
+                <div class="w-100">
+                    <p>
+                        <strong>
+                            Indicaciones:
+                        </strong>
+                    </p>
+
+                    <p>
+                        <strong>Paso 1: </strong>
+                        Enviar Nombres y apellidos, teléfono y derección para cada rifa por el botón de WhatsApp
+                    </p>
+
+                    <p>
+                        <strong>
+                            Paso 2:
+                        </strong>
+                        Enviar por WhatsApp la foto del comprobante de pago
+                    </p>
+
+                    <p>
+                        <strong>
+                            Paso 3:
+                        </strong>
+                        Seguir estado de rifas en Mis Compras.
+                    </p>
                 </div>
             </div>
             <div class="col-md-8 order-md-2 mb-4">
@@ -76,21 +104,21 @@
                 <form action="{{ route('cart.checkout') }}" method="POST" id="formCheckout" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 d-none">
                             <div class="form-group">
                                 <label for="">
                                     Codigo de transacción
                                 </label>
-                                <input type="text" name="transaction_code" class="form-control" >
+                                <input type="text" name="transaction_code" class="form-control " >
                             </div>
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 d-none">
                             <div class="form-group">
                                 <label for="">
                                     Imagen de pago
                                 </label>
-                                <input type="file" name="image" class="form-control"  accept="image/*"
+                                <input type="file" name="image" class="form-control "  accept="image/*"
                                     onchange="onSelectImage(this)">
                             </div>
                         </div>

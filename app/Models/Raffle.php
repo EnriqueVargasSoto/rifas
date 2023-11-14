@@ -19,6 +19,11 @@ class Raffle extends Model
         'code',
     ];
 
+    public function userGestor()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
     public function firstUser()
     {
         return $this->belongsTo(User::class, 'user_id_1', 'id');
@@ -35,7 +40,8 @@ class Raffle extends Model
     }
 
 
-    public function raffleImages(){
+    public function raffleImages()
+    {
         return $this->hasMany(RaffleImage::class, 'raffle_id', 'id');
     }
 
@@ -89,15 +95,15 @@ class Raffle extends Model
     }
 
 
-    public function scopeByIsVisibleInWeb($query, $is_visible_in_web=null)
+    public function scopeByIsVisibleInWeb($query, $is_visible_in_web = null)
     {
-        if ($is_visible_in_web!=null && in_array($is_visible_in_web, [0,1])) {
+        if ($is_visible_in_web != null && in_array($is_visible_in_web, [0, 1])) {
             return $query->where('is_visible_in_web', $is_visible_in_web);
         }
         return $query;
     }
 
-    public function scopeByFirstUser($query, $user_id_1=null)
+    public function scopeByFirstUser($query, $user_id_1 = null)
     {
         if ($user_id_1) {
             return $query->where('user_id_1', $user_id_1);
@@ -105,7 +111,7 @@ class Raffle extends Model
         return $query;
     }
 
-    public function scopeBySecondUser($query, $user_id_2=null)
+    public function scopeBySecondUser($query, $user_id_2 = null)
     {
         if ($user_id_2) {
             return $query->where('user_id_2', $user_id_2);
@@ -113,13 +119,11 @@ class Raffle extends Model
         return $query;
     }
 
-    public function scopeByThirdUser($query, $user_id_3=null)
+    public function scopeByThirdUser($query, $user_id_3 = null)
     {
         if ($user_id_3) {
             return $query->where('user_id_3', $user_id_3);
         }
         return $query;
     }
-
-
 }

@@ -92,6 +92,16 @@ class OrderController extends Controller
             $order->transaction_id = $request->input('transaction_id');
             $order->rejection_reason = $request->input('rejection_reason');
             $order->status = $request->status;
+            if($request->status == "aprobado"){
+                $order->aproved_by = auth('web')->user()->id;
+                $order->aproved_at = now();
+            }
+
+            if($request->status == "cancelado"){
+                $order->cancelled_by = auth('web')->user()->id;
+                $order->cancelled_at = now();
+            }
+
             $order->save();
 
             if ($request->status == "cancelado") {
@@ -99,7 +109,10 @@ class OrderController extends Controller
                 foreach ($orderItems as $orderItem) {
                     $raffle = $orderItem->raffle;
                     $raffle->status = "Stock";
+                    $raffle->transaction_id = null;
+                    $raffle->user_id  = auth('web')->user()->id;
                     $raffle->reserved_at = null;
+                    $raffle->payment_at = null;
                     $raffle->save();
 
                     $payment = Payment::where('order_id', $order->id)->where('raffle_id', $raffle->id)->first();
@@ -112,9 +125,9 @@ class OrderController extends Controller
             }
 
 
-            $amountPaid = $request->input('amount_paid');
-            $paymentStatus = $amountPaid == $order->total ? "Pagada" : "Fiada";
-            $paymentAt = $request->input('payment_at');
+            $amountPaid = $order->total;
+            $paymentStatus =  "Pagada";
+            $paymentAt = now();
 
             $payment = new Payment();
             $payment->order_id = $order->id;
@@ -128,11 +141,13 @@ class OrderController extends Controller
             $payment->model = "order";
             $payment->save();
 
-
             $orderItems = $order->order_items();
             foreach ($orderItems as $orderItem) {
                 $raffle = $orderItem->raffle;
+                $raffle->user_id = auth('web')->user()->id;
+                $raffle->payment_at = now();
                 $raffle->status = $paymentStatus;
+                $raffle->transaction_id = $order->transaction_id;
                 $raffle->save();
 
                 if ($paymentStatus == "Pagada") {
@@ -166,13 +181,26 @@ class OrderController extends Controller
                 'payment_at' => 'required'
             ]);
 
+
+
             $order = Order::find($request->order_id);
+
+            if ($order->status == "cancelado") {
+                return redirect()->back()->with('error', 'No se puede registrar un pago en una orden cancelada');
+            }
+
+            if ($order->status == "aprobado") {
+                return redirect()->back()->with('error', 'No se puede registrar un pago en una orden aprobada');
+            }
+
+            $order->status = "aprobado";
+            $amountPaid = $order->total;
 
             $payment = new Payment();
             $payment->order_id = $order->id;
             $payment->raffle_id = null;
             $payment->client_id = $order->client_id;
-            $payment->total = $request->amount_paid;
+            $payment->total = $amountPaid;
             $payment->payment_method = $request->payment_method;
             $payment->transaction_id = $request->transaction_id;
             $payment->payment_at = $request->payment_at;
@@ -182,36 +210,29 @@ class OrderController extends Controller
                 $paymentImage = $request->file('image');
                 $path = $paymentImage->store('/raffles');
                 $payment->image_payment_url = $path;
+                $order->image_payment_url = $path;
             }
-
             $payment->save();
+            $order->save();
 
+            foreach ($order->order_items as $orderItem) {
+                $raffle = $orderItem->raffle;
+                $raffle->status = "Pagada";
+                $raffle->save();
 
-            $paymentsOrder = Payment::where('order_id', $order->id)->where('model', 'order')->get();
-            $totalPaid  = $paymentsOrder->sum('total');
-
-            if ($totalPaid >= $order->total) {
-                if ($order->status == "aprobado") {
-                    foreach ($order->order_items as $orderItem) {
-                        $raffle = $orderItem->raffle;
-                        $raffle->status = "Pagada";
-                        $raffle->save();
-
-                        $paymentExists = Payment::where('order_id', $order->id)->where('raffle_id', $raffle->id)->first();
-                        if(! $paymentExists){
-                            $payment = new Payment();
-                            $payment->order_id = $order->id;
-                            $payment->raffle_id = $orderItem->raffle_id;
-                            $payment->client_id = $order->client_id;
-                            $payment->total = $orderItem->raffle->price;
-                            $payment->payment_method = $order->payment_method;
-                            $payment->transaction_id = $order->transaction_id;
-                            $payment->image_payment_url = $order->image_payment_url;
-                            $payment->payment_at = $request->payment_at;
-                            $payment->model = "raffle";
-                            $payment->save();
-                        }
-                    }
+                $paymentExists = Payment::where('order_id', $order->id)->where('raffle_id', $raffle->id)->first();
+                if (!$paymentExists) {
+                    $payment = new Payment();
+                    $payment->order_id = $order->id;
+                    $payment->raffle_id = $orderItem->raffle_id;
+                    $payment->client_id = $order->client_id;
+                    $payment->total = $orderItem->raffle->price;
+                    $payment->payment_method = $order->payment_method;
+                    $payment->transaction_id = $order->transaction_id;
+                    $payment->image_payment_url = $order->image_payment_url;
+                    $payment->payment_at = $request->payment_at;
+                    $payment->model = "raffle";
+                    $payment->save();
                 }
             }
 

@@ -9,7 +9,6 @@
                 </div>
             @endif
 
-
             @if (session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ session('error') }}
@@ -153,18 +152,21 @@
                         <!-- /.row -->
                         <div class="row my-3">
 
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 <button class="btn btn-danger btn-block" data-toggle="modal" data-target="#modalAddPayment">
                                     Agregar pago
                                 </button>
+                            </div> --}}
+                            <div class="col-md-4 mb-2">
+
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-2">
                                 <button class="btn btn-danger btn-block" data-toggle="modal"
                                     data-target="#modalImagesRaffles">
                                     Subir imagenes de rifas
                                 </button>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 mb-2">
                                 <button class="btn btn-danger btn-block" data-toggle="modal"
                                     data-target="#modalImagesPayment">
                                     Subir imagenes de comprobantes de pago
@@ -177,11 +179,8 @@
                             <div class="col-12">
                                 <a href="{{ route('orders.index') }}" role="button" class="btn btn-danger"><i
                                         class="fas fa-backward"></i> Volver</a>
-
                             </div>
                         </div>
-
-
                     </div>
                     <!-- /.invoice -->
                 </div><!-- /.col -->
@@ -341,25 +340,6 @@
                                     <input type="text" name="transaction_id" class="form-control">
                                 </div>
                             </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="">
-                                        Monto
-                                    </label>
-                                    <input type="number" name="amount_paid" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="">
-                                        Fecha de pago
-                                    </label>
-                                    <input type="date" name="payment_at" class="form-control"
-                                        value="{{ now()->format('Y/m/d') }}">
-                                </div>
-                            </div>
-
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="">
@@ -368,8 +348,6 @@
                                     <input type="text" name="payment_method" class="form-control" value="Yape">
                                 </div>
                             </div>
-
-
                             <div class="mb-3 col-md-12">
                                 <div class="form-group">
                                     <label for="">
@@ -389,12 +367,7 @@
                             <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
-
-
-
                 </form>
-
-
             </div>
         </div>
     </div>
