@@ -93,6 +93,12 @@
                                         <th>Usuario 2</th>
                                         <th>Usuario 3</th>
                                         <th>Fecha creación</th>
+                                        <th>
+                                            Cod. Transacción
+                                        </th>
+                                        <th>
+                                            Usuario Gestión
+                                        </th>
                                         <th style="width:25px">Acciones</th>
                                     </tr>
                                 </thead>
@@ -121,6 +127,10 @@
                                             <td>{{ $item->secondUser?->short_name }}</td>
                                             <td>{{ $item->thirdUser?->short_name }}</td>
                                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
+                                            <td>{{ $item->transaction_id }}</td>
+                                            <td>
+                                                {{ $item->userGestor?->name }}
+                                            </td>
                                             <td style="width:30px" class="d-flex">
                                                 <i class="fa fa-pen" data-toggle="modal" data-target="#basicModalEdit{{ $item->id }}" role="button"></i>
                                             </td>
