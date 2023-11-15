@@ -327,9 +327,11 @@
 
                                         <select name="show_information_in_web" class="form-control input-default">
                                             <option value="">Seleccione</option>
-                                            <option value="1" {{ $item->show_information_in_web == 1 ? 'selected' : '' }}>
+                                            <option value="1"
+                                                {{ $item->show_information_in_web == 1 ? 'selected' : '' }}>
                                                 Si</option>
-                                            <option value="0" {{ $item->show_information_in_web == 0 ? 'selected' : '' }}>
+                                            <option value="0"
+                                                {{ $item->show_information_in_web == 0 ? 'selected' : '' }}>
                                                 No</option>
                                         </select>
                                     </div>
@@ -355,13 +357,14 @@
 
 @section('scripts')
     <script>
+        $.validator.setDefaults({
+            submitHandler: function(form) {
+                // submit form
+                form.submit();
+            }
+        });
+
         $(function() {
-            $.validator.setDefaults({
-                submitHandler: function() {
-                    // submit form
-                    $('#formCreateUser').submit();
-                }
-            });
             $('#formCreateUser').validate({
                 rules: {
                     name: {
@@ -440,12 +443,6 @@
     @foreach ($users as $user)
         <script>
             $(function() {
-                $.validator.setDefaults({
-                    submitHandler: function() {
-                        // submit form
-                        $('#formUpdateUser' + {{ $user->id }}).submit();
-                    }
-                });
                 $('#formUpdateUser' + {{ $user->id }}).validate({
                     rules: {
                         name: {

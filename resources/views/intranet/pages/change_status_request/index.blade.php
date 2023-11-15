@@ -7,16 +7,16 @@
 
             <div class="card-header">
                 <div class="w-100 d-flex justify-content-between">
-                    <h3 class="card-title">Lista de compras web</h3>
+                    <h3 class="card-title">Lista solicitudes de cambio de estado de rifas </h3>
                     <div class="card-tools">
                     </div>
                 </div>
-                <form action="{{ route('orders.index') }}" method="GET">
+                <form action="" method="GET">
                     <div class="row mt-3">
                         <div class="col-md-3 mb-3">
                             <label for="search">Buscar </label>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="search" value="{{ $search }}">
+                                <input type="text" class="form-control" name="search" value="">
                             </div>
                         </div>
 
@@ -26,7 +26,7 @@
 
                         </div>
                         <div class="col-md-2 mt-4">
-                            <a href="{{ route('orders.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i>
+                            <a href="" class="btn btn-danger"><i class="fa fa-undo"></i>
                                 Restabler filtros</a>
                         </div>
                     </div>
@@ -61,30 +61,42 @@
                                         <th style="width: 15px">#</th>
                                         <th>Fecha</th>
                                         <th class="text-center">Estado</th>
-                                        <th class="text-right">Total</th>
-                                        <th>Cliente</th>
-                                        <th>Telefono</th>
+                                        <th>Solicitante</th>
+                                        <th>Cambiar rifas a </th>
                                         <th style="width:25px">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($orders as $item)
+                                    @foreach ($changeStatusRequests as $item)
                                         <tr>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
                                             <td class="text-center">
-                                                <div class="badge badge-{{ $item->status == 'reservado' ? 'warning' : '' }}{{ $item->status == 'aprobado' ? 'success' : '' }}{{ $item->status == 'cancelado' ? 'danger' : '' }}"
+                                                <div class="badge badge-{{ $item->status == 'Pendiente' ? 'warning' : '' }}{{ $item->status == 'Aprobado' ? 'success' : '' }}{{ $item->status == 'Rechazado' ? 'danger' : '' }}"
                                                     data-toggle="modal"
                                                     data-target="#basicModalStatusOrder{{ $item->id }}">
                                                     {{ $item->status }}
                                                 </div>
                                             </td>
-                                            <td class="text-right">{{ $item->total }}</td>
-                                            <td>{{ $item->client_name }} {{ $item->client_last_name }}</td>
-                                            <td>{{ $item->phone }}</td>
+                                            <td>{{ $item->user?->name }} {{ $item->user?->last_name }}</td>
+                                            <td>
+                                                @if ($item->status_request == 'Liquidada')
+                                                    <span class="badge badge-success">{{ $item->status_request }}</span>
+                                                @elseif ($item->status_request == 'Stock')
+                                                    <span class="badge badge-primary">{{ $item->status_request }}</span>
+                                                @elseif ($item->status_request == 'Fiada')
+                                                    <span class="badge badge-warning">{{ $item->status_request }}</span>
+                                                @elseif ($item->status_request == 'Pagada')
+                                                    <span class="badge badge-info">{{ $item->status_request }}</span>
+                                                @elseif ($item->status_request == 'Reservada')
+                                                    <span class="badge badge-secondary">{{ $item->status_request }}</span>
+                                                @else
+                                                    {{ $item->status_request }} 
+                                                @endif
+                                            </td>
                                             <td style="width:30px" class="d-flex">
-                                                <a class="fa fa-eye text-primary mx-2" role="button"
-                                                    href="{{ route('orders.show', $item->id) }}"></a>
+                                                {{-- <a class="fa fa-eye text-primary mx-2" role="button"
+                                                    href="{{ route('orders.show', $item->id) }}"></a> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -92,10 +104,11 @@
                             </table>
                             <div class="d-flex justify-content-between">
                                 <div class="mt-2">
-                                    <p>Mostrando {{ $orders->firstItem() }} a {{ $orders->lastItem() }} de
-                                        {{ $orders->total() }} registros</p>
+                                    <p>Mostrando {{ $changeStatusRequests->firstItem() }} a
+                                        {{ $changeStatusRequests->lastItem() }} de
+                                        {{ $changeStatusRequests->total() }} registros</p>
                                 </div>
-                                {{ $orders->appends(['search' => $search])->links() }}
+                                {{ $changeStatusRequests->appends(['search' => ''])->links() }}
                             </div>
                         </div>
                     </div>
@@ -104,7 +117,7 @@
         </div>
     </div>
 
-    @foreach ($orders as $item)
+    {{-- @foreach ($changeStatusRequests as $item)
         <div class="modal fade" id="basicModalStatusOrder{{ $item->id }}">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -179,36 +192,36 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @endforeach --}}
 @endsection
 @section('scripts')
     <script>
-        function selectStatus(e,id) {
-        
-            const status = e.value;
-            if (status == 'aprobado') {
-                document.getElementById('containerAprovedOrder'+id).classList.remove('d-none');
-                document.getElementById('containerCancelOrder'+id).classList.add('d-none');
-            } else if (status == 'cancelado') {
-                document.getElementById('containerAprovedOrder'+id).classList.add('d-none');
-                document.getElementById('containerCancelOrder'+id).classList.remove('d-none');
-            } else {
-                document.getElementById('containerAprovedOrder'+id).classList.add('d-none');
-                document.getElementById('containerCancelOrder'+id).classList.add('d-none');
-            }
+        // function selectStatus(e,id) {
 
-        }
-        $(function() {
-            $.validator.setDefaults({
-                submitHandler: function(form) {
-                    // submit form
-                    form.submit();
-                }
-            });
-        });
+        //     const status = e.value;
+        //     if (status == 'aprobado') {
+        //         document.getElementById('containerAprovedOrder'+id).classList.remove('d-none');
+        //         document.getElementById('containerCancelOrder'+id).classList.add('d-none');
+        //     } else if (status == 'cancelado') {
+        //         document.getElementById('containerAprovedOrder'+id).classList.add('d-none');
+        //         document.getElementById('containerCancelOrder'+id).classList.remove('d-none');
+        //     } else {
+        //         document.getElementById('containerAprovedOrder'+id).classList.add('d-none');
+        //         document.getElementById('containerCancelOrder'+id).classList.add('d-none');
+        //     }
+
+        // }
+        // $(function() {
+        //     $.validator.setDefaults({
+        //         submitHandler: function(form) {
+        //             // submit form
+        //             form.submit();
+        //         }
+        //     });
+        // });
     </script>
 
-    @foreach ($orders as $order)
+    {{-- @foreach ($orders as $order)
         <script>
             $(function() {
 
@@ -237,5 +250,5 @@
                 });
             });
         </script>
-    @endforeach
+    @endforeach --}}
 @endsection

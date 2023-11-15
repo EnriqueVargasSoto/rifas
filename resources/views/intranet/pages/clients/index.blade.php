@@ -191,7 +191,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{ route('users.update', $item->id) }}" method="post"
+                    <form action="{{ route('clients.update', $item->id) }}" method="post"
                         id="formUpdateClient{{ $item->id }}">
                         @method('PUT')
                         @csrf
@@ -262,13 +262,14 @@
 
 @section('scripts')
     <script>
-        $(function() {
-            $.validator.setDefaults({
-                submitHandler: function() {
+        $.validator.setDefaults({
+                submitHandler: function(form) {
                     // submit form
-                    $('#formCreateClient').submit();
+                    form.submit();
                 }
-            });
+        });
+        $(function() {
+ 
             $('#formCreateClient').validate({
                 rules: {
                     name: {
@@ -317,12 +318,6 @@
     @foreach ($clients as $client)
         <script>
             $(function() {
-                $.validator.setDefaults({
-                    submitHandler: function() {
-                        // submit form
-                        $('#formUpdateClient' + {{ $client->id }}).submit();
-                    }
-                });
                 $('#formUpdateClient' + {{ $client->id }}).validate({
                     rules: {
                         name: {

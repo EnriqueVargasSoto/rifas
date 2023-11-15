@@ -25,7 +25,7 @@
 
                         <div class="col-md-3 mb-3">
                             <label for="is_visible_in_web">Visible en la web</label>
-                            <select name="is_visible_in_web" class="form-control"  value="{{ $is_visible_in_web }}">
+                            <select name="is_visible_in_web" class="form-control" value="{{ $is_visible_in_web }}">
                                 <option value="" selected>Seleccione</option>
                                 <option value="1" @if ($is_visible_in_web == 1) selected @endif>Si</option>
                                 <option value="0" @if ($is_visible_in_web == 0) selected @endif>No</option>
@@ -35,7 +35,7 @@
                         @foreach (range(1, 3) as $index)
                             <div class="col-md-4 mb-3">
                                 <label for="user_id_{{ $index }}">Usuario {{ $index }}</label>
-                                <select name="user_id_{{ $index }}" class="form-control" >
+                                <select name="user_id_{{ $index }}" class="form-control">
                                     <option value="" selected>Seleccione</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}"
@@ -48,12 +48,13 @@
                         @endforeach
 
                         <div class="col-md-2 mt-4">
-                            
+
                             <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-                            
+
                         </div>
                         <div class="col-md-2 mt-4">
-                            <a href="{{route('rifas.index')}}" class="btn btn-danger"><i class="fa fa-undo"></i> Restabler filtros</a>
+                            <a href="{{ route('rifas.index') }}" class="btn btn-danger"><i class="fa fa-undo"></i> Restabler
+                                filtros</a>
                         </div>
                     </div>
                 </form>
@@ -100,26 +101,34 @@
                                         <tr>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->code }}</td>
-                                            <td>{{ $item->status }}</td>
+                                            <td>
+                                                @if ($item->status == 'Liquidada')
+                                                    <span class="badge badge-success">{{ $item->status }}</span>
+                                                @elseif ($item->status == 'Stock')
+                                                    <span class="badge badge-primary">{{ $item->status }}</span>
+                                                @elseif ($item->status == 'Fiada')
+                                                    <span class="badge badge-warning">{{ $item->status }}</span>
+                                                @elseif ($item->status == 'Pagada')
+                                                    <span class="badge badge-info">{{ $item->status }}</span>
+                                                @elseif ($item->status == 'Reservada')
+                                                    <span class="badge badge-secondary">{{ $item->status }}</span>
+                                                @else
+                                                    {{ $item->status }}
+                                                @endif
+                                            </td>
                                             <td>{{ $item->price }}</td>
                                             <td>{{ $item->firstUser?->short_name }}</td>
                                             <td>{{ $item->secondUser?->short_name }}</td>
                                             <td>{{ $item->thirdUser?->short_name }}</td>
                                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
                                             <td style="width:30px" class="d-flex">
-                                                <i class="fa fa-pen"  data-toggle="modal" data-target="#basicModalEdit{{ $item->id }}" role="button"></i>
-
-                                                {{-- <i data-toggle="modal" data-target="#basicModalGallery{{ $item->id }}" class="fa fa-images text-primary mx-2" role="button"></i> --}}
-
-
-                                                {{-- <a href="{{route('serials.destroy', $item->id)}}" class="btn btn-danger"><i class="fa-solid fa-trash me-2"></i>Eliminar</a> --}}
+                                                <i class="fa fa-pen" data-toggle="modal" data-target="#basicModalEdit{{ $item->id }}" role="button"></i>
                                             </td>
                                         </tr>
                                     @endforeach
-
-
                                 </tbody>
                             </table>
+                            
                             <div class="d-flex justify-content-between">
                                 <div class="mt-2">
                                     <p>Mostrando {{ $raffles->firstItem() }} a {{ $raffles->lastItem() }} de
@@ -414,16 +423,20 @@
         </div> --}}
     @endforeach
 @endsection
+
 @section('scripts')
+    <script>
+        $.validator.setDefaults({
+            submitHandler: function(form) {
+                // submit form
+                form.submit();
+            }
+        });
+    </script>
     @foreach ($raffles as $raffle)
         <script>
             $(function() {
-                $.validator.setDefaults({
-                    submitHandler: function() {
-                        // submit form
-                        $('#storeRaffleFile' + {{ $raffle->id }}).submit();
-                    }
-                });
+
                 $('#storeRaffleFile' + {{ $raffle->id }}).validate({
                     rules: {
                         image: {

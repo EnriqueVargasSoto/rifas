@@ -29,7 +29,7 @@
                     @elseif($order->status == 'aprobado')
                         <span class="badge badge-success">Su compra a sido aprobada</span>
                     @elseif($order->status == 'cancelado')
-                        <span class="badge badge-danger">Su compra a sido cancelada</span>
+                        <span class="badge badge-danger">Su compra a sido cancelada</span> : {{ $order->rejection_reason }}
                     @endif
 
                     <div class="d-flex flex-wrap mt-4">

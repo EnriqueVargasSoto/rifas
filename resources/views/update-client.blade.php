@@ -76,8 +76,8 @@
     <script>
         $(function() {
             $.validator.setDefaults({
-                submitHandler: function() {
-                    $('#updateForm').submit();
+                submitHandler: function(form) {
+                    form.submit();
                 }
             });
             $('#updateForm').validate({

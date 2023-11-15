@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('change_status_requests', function (Blueprint $table) {
             $table->id();
-            $table->enum('before_status', ['Liquidada', 'Stock', 'Fiada', 'Pagada', 'Reservada']);
-            $table->enum('after_status', ['Liquidada', 'Stock', 'Fiada', 'Pagada', 'Reservada']);
-            $table->enum('status', ['Aprobado', 'Rechazado'])->default('Aprobado');
+            $table->enum('status_request', ['Liquidada', 'Stock', 'Fiada', 'Pagada', 'Reservada']);
+            $table->enum('status', ['Pendiente', 'Aprobado', 'Rechazado'])->default('Pendiente');
             $table->unsignedBigInteger('user_id_gestion')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->dateTime('approved_at')->nullable();

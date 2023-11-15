@@ -132,7 +132,7 @@
                                                     <td class="text-left">
                                                         {{ $payment->transaction_id }}
                                                     </td>
-                                                    
+
                                                     <td>
                                                         {{ $payment->payment_at->format('d/m/Y') }}
                                                     </td>
@@ -386,13 +386,14 @@
         }
     </script>
     <script>
+        $.validator.setDefaults({
+            submitHandler: function(form) {
+                // submit form
+               form.submit();
+            }
+        });
+        
         $(function() {
-            $.validator.setDefaults({
-                submitHandler: function() {
-                    // submit form
-                    $('#storeRaffleFile').submit();
-                }
-            });
             $('#storeRaffleFile').validate({
                 rules: {
                     image: {
@@ -420,12 +421,6 @@
 
 
         $(function() {
-            $.validator.setDefaults({
-                submitHandler: function() {
-                    // submit form
-                    $('#storePayment').submit();
-                }
-            });
             $('#storePayment').validate({
                 rules: {
                     transaction_id: {

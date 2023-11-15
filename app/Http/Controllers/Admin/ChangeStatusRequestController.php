@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\ChangeStatusRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ChangeStatusRequestController extends Controller
@@ -10,9 +12,15 @@ class ChangeStatusRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+
+        $changeStatusRequests = ChangeStatusRequest::with('user')->byUserId($request->query('user_id'))
+            ->orderBy('created_at', 'desc')->paginate(12);
+        
+        $users= User::all();
+        return view('intranet.pages.change_status_request.index', compact('changeStatusRequests', 'users'));
     }
 
     /**

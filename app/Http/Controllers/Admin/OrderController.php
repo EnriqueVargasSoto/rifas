@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Order;
 use App\Models\OrderImage;
 use App\Models\Payment;
+use App\Models\Raffle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -89,6 +90,12 @@ class OrderController extends Controller
                 return redirect()->back()->with('error', 'No se puede cambiar el estado de una orden cancelada');
             }
 
+            $totalPaid = Payment::where('order_id', $order->id)->where('model', 'order')->sum('total');
+            
+            if ($totalPaid >= $order->total  && $request->status == "aprobado") {
+                return redirect()->back()->with('error', 'Esta orden ya se encuentra pagada y aprobada');
+            }
+
             $order->transaction_id = $request->input('transaction_id');
             $order->rejection_reason = $request->input('rejection_reason');
             $order->status = $request->status;
@@ -105,9 +112,9 @@ class OrderController extends Controller
             $order->save();
 
             if ($request->status == "cancelado") {
-                $orderItems = $order->order_items();
+                $orderItems = $order->order_items;
                 foreach ($orderItems as $orderItem) {
-                    $raffle = $orderItem->raffle;
+                    $raffle = Raffle::find($orderItem->raffle_id);
                     $raffle->status = "Stock";
                     $raffle->transaction_id = null;
                     $raffle->user_id  = auth('web')->user()->id;
@@ -141,9 +148,9 @@ class OrderController extends Controller
             $payment->model = "order";
             $payment->save();
 
-            $orderItems = $order->order_items();
+            $orderItems = $order->order_items;
             foreach ($orderItems as $orderItem) {
-                $raffle = $orderItem->raffle;
+                $raffle = Raffle::find($orderItem->raffle_id);
                 $raffle->user_id = auth('web')->user()->id;
                 $raffle->payment_at = now();
                 $raffle->status = $paymentStatus;

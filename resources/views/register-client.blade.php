@@ -41,7 +41,7 @@
                             <div class="row mt-3">
                                 <!-- /.col -->
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                                    <button type="submit" class="btn btn-primary btn-block"> <i id="sendingForm" class="fa fa-spinner fa fa-spin d-none"></i> Ingresar</button>
                                 </div>
                                 <!-- /.col -->
                             </div>
@@ -62,8 +62,10 @@
 <script>
     $(function() {
         $.validator.setDefaults({
-            submitHandler: function() {
-                $('#registerForm').submit();
+            submitHandler: function(form) {
+                const sendingForm = document.getElementById('sendingForm');
+                sendingForm.classList.remove('d-none');
+                form.submit();
             }
         });
         $('#registerForm').validate({

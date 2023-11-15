@@ -268,9 +268,9 @@
        <script>
         $(function() {
             $.validator.setDefaults({
-                submitHandler: function() {
+                submitHandler: function(form) {
                     // submit form
-                    $('#storeRaffleFile').submit();
+                    form.submit();
                 }
             });
             $('#storeRaffleFile').validate({

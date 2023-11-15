@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChangeStatusRaffles;
+use App\Models\ChangeStatusRequest;
 use App\Models\Raffle;
 use App\Models\RaffleImage;
 use App\Models\User;
@@ -17,12 +19,12 @@ class RaffleController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
-        $is_visible_in_web = $request->query('is_visible_in_web','');
+        $is_visible_in_web = $request->query('is_visible_in_web', '');
 
         $user_id_1 = $request->query('user_id_1');
         $user_id_2 = $request->query('user_id_2');
         $user_id_3 = $request->query('user_id_3');
-        $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser','raffleImages')
+        $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser', 'raffleImages')
             ->byStatus($request->query('status'))
             ->byFirstUser($user_id_1)
             ->bySecondUser($user_id_2)
@@ -83,8 +85,7 @@ class RaffleController extends Controller
             $raffleImage->image_url = $path;
             $raffleImage->save();
 
-            return redirect()->route('rifas.index')->with('success', 'Imagen subida correctamente'); 
-
+            return redirect()->route('rifas.index')->with('success', 'Imagen subida correctamente');
         } catch (\Exception $e) {
             return redirect()->route('rifas.index')->with('error', 'Error al subir imagen: ' . $e->getMessage());
         }
@@ -104,7 +105,6 @@ class RaffleController extends Controller
 
             $raffleImage->delete();
             return redirect()->route('rifas.index')->with('success', 'Imagen eliminada correctamente');
-
         } catch (\Exception $e) {
             return redirect()->route('rifas.index')->with('error', 'Error al eliminar imagen: ' . $e->getMessage());
         }
@@ -162,6 +162,78 @@ class RaffleController extends Controller
             return redirect()->route('rifas.index')->with('success', 'Rifa eliminada correctamente');
         } catch (\Exception $e) {
             return redirect()->route('rifas.index')->with('error', 'Error al eliminar la rifa: ' . $e->getMessage());
+        }
+    }
+
+
+    public function status(Request $request)
+    {
+        $search = $request->query('search');
+        $is_visible_in_web = $request->query('is_visible_in_web', '');
+
+        $user_id_1 = $request->query('user_id_1');
+        $user_id_2 = $request->query('user_id_2');
+        $user_id_3 = $request->query('user_id_3');
+        $status = $request->query('status');
+        $start = $request->query('start');
+        $end = $request->query('end');
+
+        $paginateRows = 12;
+
+        if($start && $end){
+            $paginateRows = 500;
+        }
+
+        $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser', 'raffleImages')
+            ->byStatus($request->query('status'))
+            ->bySearch($search)
+            ->betweenNumber($start, $end)
+            ->paginate($paginateRows);
+
+        $users = User::orderBy('name', 'asc')->get();
+
+        return view('intranet.pages.raffles.status', compact('raffles', 'status', 'users', 'search', 'is_visible_in_web', 'user_id_1', 'user_id_2', 'user_id_3', 'start', 'end'));
+    }
+
+
+    public function requestChangeStatus(Request $request)
+    {
+        try {
+
+            $request->validate([
+                'status' => 'required|in:Liquidada,Stock,Fiada,Pagada,Reservada'
+            ]);
+
+            if(!count($request->input('selectedItems',[]))){
+                return redirect()->route('rifas.status')->with('error', 'Debe seleccionar al menos una rifa');
+            }
+
+            $changeStatusRequest = new ChangeStatusRequest();
+            $changeStatusRequest->status_request = $request->input('status');
+            $changeStatusRequest->status = 'Pendiente';
+            $changeStatusRequest->user_id = auth('web')->user()->id;
+            $changeStatusRequest->transaction_id = $request->input('transaction_id');
+            if($request->hasFile('image')){
+                $image = $request->file('image');
+                $path = $image->store('/change-status-requests');
+                $changeStatusRequest->image_url = $path;
+            }
+            $changeStatusRequest->save();
+
+            $rafles = Raffle::whereIn('id', $request->input('selectedItems'))->get();
+
+            foreach ($rafles as $raffle) {
+                $changeStatusRaffle = new ChangeStatusRaffles();
+                $changeStatusRaffle->raffle_id = $raffle->id;
+                $changeStatusRaffle->change_status_request_id = $changeStatusRequest->id;
+                $changeStatusRaffle->before_status = $raffle->status;
+                $changeStatusRaffle->after_status = $request->input('status');
+                $changeStatusRaffle->save();
+            }
+
+            return redirect()->route('rifas.status')->with('success', 'Rifa actualizada correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('rifas.status')->with('error', 'Error al actualizar la rifa: ' . $e->getMessage());
         }
     }
 }

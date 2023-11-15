@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('raffle_id');
             $table->unsignedBigInteger('change_status_request_id');
+            $table->enum('before_status', ['Liquidada', 'Stock', 'Fiada', 'Pagada', 'Reservada']);
+            $table->enum('after_status', ['Liquidada', 'Stock', 'Fiada', 'Pagada', 'Reservada']);
             $table->timestamps();
             $table->softDeletes();
         });

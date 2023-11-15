@@ -8,8 +8,9 @@
             </div>
             <div class="info">
                 <a href="#" class="d-block">@auth
-                    {{Auth::user()->name . ' ' . Auth::user()->last_name}}
-                @endauth</a>
+                        {{ Auth::user()->name . ' ' . Auth::user()->last_name }}
+                    @endauth
+                </a>
             </div>
         </div>
 
@@ -29,14 +30,31 @@
                 <li class="nav-item ">
                     <a href="{{ route('rifas.index') }}" class="nav-link {{ request()->is('rifas') ? 'active' : '' }}">
                         <i class="nav-icon far fa-id-card"></i>
-                        
+
                         <p>
                             Rifas
                         </p>
                     </a>
                 </li>
                 <li class="nav-item ">
-                    <a href="{{ route('assignaciones.index') }}" class="nav-link {{ request()->is('assignaciones') ? 'active' : '' }}">
+                    <a href="{{ route('rifas.status') }}" class="nav-link {{ request()->is('rifas-status') ? 'active' : '' }}">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                            Estado de rifas
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a href="{{ route('change-status-requests.index') }}" class="nav-link {{ request()->is('change-status-requests') ? 'active' : '' }}">
+                        <i class="nav-icon far fa-id-card"></i>
+                        <p>
+                            Solicitudes estado
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a href="{{ route('assignaciones.index') }}"
+                        class="nav-link {{ request()->is('assignaciones') ? 'active' : '' }}">
                         <i class="nav-icon far fa-user"></i>
                         <p>
                             Asignación
@@ -44,7 +62,8 @@
                     </a>
                 </li>
                 <li class="nav-item ">
-                    <a href="{{ route('orders.index') }}" class="nav-link {{ request()->is('orders') ? 'active' : '' }}">
+                    <a href="{{ route('orders.index') }}"
+                        class="nav-link {{ request()->is('orders') ? 'active' : '' }}">
                         <i class="nav-icon far fa fa-shopping-cart"></i>
                         <p>
                             Compras web
@@ -52,7 +71,8 @@
                     </a>
                 </li>
                 <li class="nav-item ">
-                    <a href="{{ route('clients.index') }}" class="nav-link {{ request()->is('clients') ? 'active' : '' }}">
+                    <a href="{{ route('clients.index') }}"
+                        class="nav-link {{ request()->is('clients') ? 'active' : '' }}">
                         <i class="nav-icon far fa-user"></i>
                         <p>
                             Clientes
