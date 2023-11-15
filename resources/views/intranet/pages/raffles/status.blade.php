@@ -31,7 +31,7 @@
                                 <option value="Liquidada" @if ($status == 'Liquidada') selected @endif>Liquidada
                                 </option>
                                 <option value="Stock" @if ($status == 'Stock') selected @endif>Stock</option>
-                                <option value="Fiada" @if ($status == 'Fiada') selected @endif>Fiada</option>
+                                {{-- <option value="Fiada" @if ($status == 'Fiada') selected @endif>Fiada</option> --}}
                                 <option value="Pagada" @if ($status == 'Pagada') selected @endif>Pagada</option>
                                 <option value="Reservada" @if ($status == 'Reservada') selected @endif>Reservada
                                 </option>
@@ -129,9 +129,9 @@
                                                 <option value="Stock" @if ($status == 'Stock') selected @endif>
                                                     Stock
                                                 </option>
-                                                <option value="Fiada" @if ($status == 'Fiada') selected @endif>
+                                                {{-- <option value="Fiada" @if ($status == 'Fiada') selected @endif>
                                                     Fiada
-                                                </option>
+                                                </option> --}}
                                                 <option value="Pagada" @if ($status == 'Pagada') selected @endif>
                                                     Pagada</option>
                                                 <option value="Reservada"
@@ -141,23 +141,23 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
+                                    <div class="col-md-3" id="image_request">
+                                        <div class="form-group" >
 
                                             <label for="">
                                                 Seleccione imagen de comprobante
                                             </label>
-                                            <input type="file" class="form-control" name="image" id="image_request"
+                                            <input type="file" class="form-control" name="image" 
                                                 accept="image/*">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3" id="transaction_id_request">
                                         <div class="form-group">
                                             <label for="">
                                                 Codigo de transacción
                                             </label>
                                             <input type="text" class="form-control" name="transaction_id"
-                                                id="transaction_id_request">
+                                                >
                                         </div>
 
                                     </div>
@@ -211,6 +211,7 @@
                                     <p>Mostrando {{ $raffles->firstItem() }} a {{ $raffles->lastItem() }} de
                                         {{ $raffles->total() }} registros</p>
                                 </div>
+                                {{ $raffles->appends(['search' => $search, 'status' => $status, 'is_visible_in_web' => $is_visible_in_web, 'user_id_1' => $user_id_1, 'user_id_2' => $user_id_2, 'user_id_3' => $user_id_3])->links() }}
                             </div>
                         </form>
                     </div>
@@ -230,6 +231,17 @@
             var checkboxes = document.getElementsByClassName('selectItem');
             for (var i = 0; i < checkboxes.length; i++) {
                 checkboxes[i].checked = this.checked;
+            }
+        });
+
+        document.getElementById('selectStatusDestinatation').addEventListener('change', function() {
+            var status = this.value;
+            if (status == 'Liquidada') {
+                document.getElementById('image_request').style.display = 'block';
+                document.getElementById('transaction_id_request').style.display = 'block';
+            } else {
+                document.getElementById('image_request').style.display = 'none';
+                document.getElementById('transaction_id_request').style.display = 'none';
             }
         });
 

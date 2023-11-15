@@ -52,13 +52,13 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($order->order_items as $key => $orderItem)
-                                        @endforeach
                                         <tr>
                                             <td class="text-center">{{ $key + 1 }}</td>
                                             <td class="text-center">1</td>
                                             <td class="text-center">{{ $orderItem->raffle->code }}</td>
                                             <td class="text-right">{{ $orderItem->raffle->price }}</td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

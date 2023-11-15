@@ -24,6 +24,20 @@
                         </div>
 
                         <div class="col-md-3 mb-3">
+                            <label for="status">Estado</label>
+                            <select name="status" class="form-control" value="{{ $status }}">
+                                <option value="" selected>Seleccione</option>
+                                <option value="Liquidada" @if ($status == 'Liquidada') selected @endif>Liquidada
+                                </option>
+                                <option value="Stock" @if ($status == 'Stock') selected @endif>Stock</option>
+                                {{-- <option value="Fiada" @if ($status == 'Fiada') selected @endif>Fiada</option> --}}
+                                <option value="Pagada" @if ($status == 'Pagada') selected @endif>Pagada</option>
+                                <option value="Reservada" @if ($status == 'Reservada') selected @endif>Reservada
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
                             <label for="is_visible_in_web">Visible en la web</label>
                             <select name="is_visible_in_web" class="form-control" value="{{ $is_visible_in_web }}">
                                 <option value="" selected>Seleccione</option>
@@ -127,7 +141,7 @@
                                             <td>{{ $item->secondUser?->short_name }}</td>
                                             <td>{{ $item->thirdUser?->short_name }}</td>
                                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
-                                            <td>{{ $item->transaction_id }}</td>
+                                            <td>{{ $item->transaction_id  }} - {{$item->transaction_liquidation_id}}</td>
                                             <td>
                                                 {{ $item->userGestor?->name }}
                                             </td>
@@ -145,7 +159,7 @@
                                         {{ $raffles->total() }} registros</p>
                                 </div>
 
-                                {{ $raffles->appends(['search' => $search])->links() }}
+                                {{ $raffles->appends(['search' => $search, 'status' => $status, 'is_visible_in_web' => $is_visible_in_web, 'user_id_1' => $user_id_1, 'user_id_2' => $user_id_2, 'user_id_3' => $user_id_3])->links() }}
                             </div>
                         </div>
                     </div>
@@ -287,8 +301,8 @@
                                                 Liquidada</option>
                                             <option value="Stock" @if ($item->status == 'Stock') selected @endif>Stock
                                             </option>
-                                            <option value="Fiada" @if ($item->status == 'Fiada') selected @endif>Fiada
-                                            </option>
+                                            {{-- <option value="Fiada" @if ($item->status == 'Fiada') selected @endif>Fiada
+                                            </option> --}}
                                             <option value="Pagada" @if ($item->status == 'Pagada') selected @endif>
                                                 Pagada</option>
                                             <option value="Reservada" @if ($item->status == 'Reservada') selected @endif>

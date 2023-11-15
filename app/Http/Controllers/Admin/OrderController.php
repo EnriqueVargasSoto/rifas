@@ -96,9 +96,16 @@ class OrderController extends Controller
                 return redirect()->back()->with('error', 'Esta orden ya se encuentra pagada y aprobada');
             }
 
+            $transactionIdRegistred= Payment::where('transaction_id', $request->input('transaction_id'))->first();
+
+            if($transactionIdRegistred && $request->status == "aprobado"){
+                return redirect()->back()->with('error', 'Esta transacción ya se encuentra registrada');
+            }
+
             $order->transaction_id = $request->input('transaction_id');
             $order->rejection_reason = $request->input('rejection_reason');
             $order->status = $request->status;
+            
             if($request->status == "aprobado"){
                 $order->aproved_by = auth('web')->user()->id;
                 $order->aproved_at = now();

@@ -9,6 +9,15 @@ class ChangeStatusRequest extends Model
 {
     use HasFactory;
 
+    public function userGestion()
+    {
+        return $this->belongsTo(User::class, 'user_id_gestion', 'id');
+    }
+
+    public function changeStatusRaffles()
+    {
+        return $this->hasMany(ChangeStatusRaffles::class, 'change_status_request_id', 'id');
+    }
 
     public function user()
     {

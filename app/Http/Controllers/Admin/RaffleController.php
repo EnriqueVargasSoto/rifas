@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ChangeStatusRaffles;
 use App\Models\ChangeStatusRequest;
+use App\Models\Payment;
 use App\Models\Raffle;
 use App\Models\RaffleImage;
 use App\Models\User;
@@ -24,8 +25,10 @@ class RaffleController extends Controller
         $user_id_1 = $request->query('user_id_1');
         $user_id_2 = $request->query('user_id_2');
         $user_id_3 = $request->query('user_id_3');
+        $status = $request->query('status');
+
         $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser', 'raffleImages')
-            ->byStatus($request->query('status'))
+            ->byStatus($status)
             ->byFirstUser($user_id_1)
             ->bySecondUser($user_id_2)
             ->byThirdUser($user_id_3)
@@ -34,7 +37,7 @@ class RaffleController extends Controller
             ->paginate(12);
 
         $users = User::orderBy('name', 'asc')->get();
-        return view('intranet.pages.raffles.index', compact('raffles', 'search', 'users', 'is_visible_in_web', 'user_id_1', 'user_id_2', 'user_id_3'));
+        return view('intranet.pages.raffles.index', compact('raffles', 'search', 'users', 'is_visible_in_web', 'user_id_1', 'user_id_2', 'user_id_3', 'status'));
     }
 
     /**
@@ -180,7 +183,7 @@ class RaffleController extends Controller
 
         $paginateRows = 12;
 
-        if($start && $end){
+        if ($start && $end) {
             $paginateRows = 500;
         }
 
@@ -204,21 +207,39 @@ class RaffleController extends Controller
                 'status' => 'required|in:Liquidada,Stock,Fiada,Pagada,Reservada'
             ]);
 
-            if(!count($request->input('selectedItems',[]))){
+            if (!count($request->input('selectedItems', []))) {
                 return redirect()->route('rifas.status')->with('error', 'Debe seleccionar al menos una rifa');
+            }
+
+            $rafflesLiquided = Raffle::whereIn('id', $request->input('selectedItems'))->where('status', 'Liquidada')->exists();
+            if ($rafflesLiquided && $request->input('status') == "Liquidada") {
+                return redirect()->route('rifas.status')->with('error', 'No se puede liquidar una o mas rifas que ya se encuentra liquidada');
+            }
+
+            // $rafflesPagada = Raffle::whereIn('id', $request->input('selectedItems'))->where('status', 'Pagada')->exists();
+            // if ($rafflesPagada && $request->input('status') == "Stock") {
+            //     return redirect()->route('rifas.status')->with('error', 'No se puede devolver a stock una o mas rifas que ya se encuentra pagada');
+            // }
+
+            $transactionIdRegistred = Payment::where('transaction_id', $request->input('transaction_id'))->first();
+            if ($transactionIdRegistred) {
+                return redirect()->route('rifas.status')->with('error', 'El número de transacción ya se encuentra registrado');
             }
 
             $changeStatusRequest = new ChangeStatusRequest();
             $changeStatusRequest->status_request = $request->input('status');
-            $changeStatusRequest->status = 'Pendiente';
+            $changeStatusRequest->status = $request->input('status') == "Liquidada" ? "Pendiente" : "Aprobado";
             $changeStatusRequest->user_id = auth('web')->user()->id;
+            $changeStatusRequest->user_id_gestion = auth('web')->user()->id;
             $changeStatusRequest->transaction_id = $request->input('transaction_id');
-            if($request->hasFile('image')){
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $path = $image->store('/change-status-requests');
                 $changeStatusRequest->image_url = $path;
             }
             $changeStatusRequest->save();
+
+
 
             $rafles = Raffle::whereIn('id', $request->input('selectedItems'))->get();
 
@@ -229,7 +250,32 @@ class RaffleController extends Controller
                 $changeStatusRaffle->before_status = $raffle->status;
                 $changeStatusRaffle->after_status = $request->input('status');
                 $changeStatusRaffle->save();
+
+
+                if($changeStatusRequest->status_request != "Liquidada"){
+                    $raffle->status = $request->input('status');
+                    // $raffle->transaction_liquidation_id = $request->input('transaction_id');
+                    // $raffle->liquidation_at = now();
+                    $raffle->save();
+
+                    // $paymentExists = Payment::where('raffle_id', $raffle->id)->first();
+
+                    // if (!$paymentExists) {
+                    //     $payment = new Payment();
+                    //     $payment->transaction_id = $request->input('transaction_id');
+                    //     $payment->user_id = auth('web')->user()->id;
+                    //     $payment->total = $raffle->price;
+                    //     $payment->raffle_id = $raffle->id;
+                    //     $payment->model = "raffle";
+                    //     $payment->payment_at = now();
+                    //     $payment->image_payment_url = $changeStatusRequest->image_url;
+                    //     $payment->save();
+                    // }
+                }
+
             }
+
+
 
             return redirect()->route('rifas.status')->with('success', 'Rifa actualizada correctamente');
         } catch (\Exception $e) {

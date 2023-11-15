@@ -58,7 +58,7 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::delete('/rifas/delete-file/{id}', [RaffleController::class, 'deleteFile'])->name('rifas.deleteFile');
     Route::get('/rifas-status', [RaffleController::class, 'status'])->name('rifas.status');
     Route::post('rifas/request-change-status', [RaffleController::class, 'requestChangeStatus'])->name('rifas.requestChangeStatus');
-
+    Route::post('change-status-requests', [App\Http\Controllers\Admin\ChangeStatusRequestController::class, 'changeStatusRequest'])->name('changeStatusRequest.changeStatus');
     Route::get('change-status-requests', [App\Http\Controllers\Admin\ChangeStatusRequestController::class, 'index'])->name('change-status-requests.index');
     Route::resource('rifas', RaffleController::class);
 

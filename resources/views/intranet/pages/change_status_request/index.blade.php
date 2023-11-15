@@ -11,7 +11,7 @@
                     <div class="card-tools">
                     </div>
                 </div>
-                <form action="" method="GET">
+                {{-- <form action="" method="GET">
                     <div class="row mt-3">
                         <div class="col-md-3 mb-3">
                             <label for="search">Buscar </label>
@@ -26,11 +26,11 @@
 
                         </div>
                         <div class="col-md-2 mt-4">
-                            <a href="" class="btn btn-danger"><i class="fa fa-undo"></i>
+                            <a href="{{route('change-status-requests.index')}}" class="btn btn-danger"><i class="fa fa-undo"></i>
                                 Restabler filtros</a>
                         </div>
                     </div>
-                </form>
+                </form> --}}
 
 
             </div>
@@ -62,6 +62,9 @@
                                         <th>Fecha</th>
                                         <th class="text-center">Estado</th>
                                         <th>Solicitante</th>
+                                        <th>
+                                            Aprobado por
+                                        </th>
                                         <th>Cambiar rifas a </th>
                                         <th style="width:25px">Acciones</th>
                                     </tr>
@@ -74,11 +77,12 @@
                                             <td class="text-center">
                                                 <div class="badge badge-{{ $item->status == 'Pendiente' ? 'warning' : '' }}{{ $item->status == 'Aprobado' ? 'success' : '' }}{{ $item->status == 'Rechazado' ? 'danger' : '' }}"
                                                     data-toggle="modal"
-                                                    data-target="#basicModalStatusOrder{{ $item->id }}">
+                                                    data-target="#basicModalStatusChange{{ $item->id }}">
                                                     {{ $item->status }}
                                                 </div>
                                             </td>
                                             <td>{{ $item->user?->name }} {{ $item->user?->last_name }}</td>
+                                            <td>{{ $item->userGestion?->name }} {{ $item->userGestion?->last_name }}</td>
                                             <td>
                                                 @if ($item->status_request == 'Liquidada')
                                                     <span class="badge badge-success">{{ $item->status_request }}</span>
@@ -91,12 +95,13 @@
                                                 @elseif ($item->status_request == 'Reservada')
                                                     <span class="badge badge-secondary">{{ $item->status_request }}</span>
                                                 @else
-                                                    {{ $item->status_request }} 
+                                                    {{ $item->status_request }}
                                                 @endif
                                             </td>
                                             <td style="width:30px" class="d-flex">
-                                                {{-- <a class="fa fa-eye text-primary mx-2" role="button"
-                                                    href="{{ route('orders.show', $item->id) }}"></a> --}}
+                                                <i class="fa fa-image text-info" data-toggle="modal"
+                                                    data-target="#basicModalGallery{{ $item->id }}" role="button"></i>
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -117,8 +122,8 @@
         </div>
     </div>
 
-    {{-- @foreach ($changeStatusRequests as $item)
-        <div class="modal fade" id="basicModalStatusOrder{{ $item->id }}">
+    @foreach ($changeStatusRequests as $item)
+        <div class="modal fade" id="basicModalStatusChange{{ $item->id }}">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -128,57 +133,21 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('orders.changeStatus') }}" method="POST" enctype="multipart/form-data"
-                            id="changeOrderStatus{{ $item->id }}">
+                        <form action="{{ route('changeStatusRequest.changeStatus') }}" method="POST"
+                            id="changeStatusRequests{{ $item->id }}">
                             @method('POST')
                             @csrf
-                            <input type="hidden" name="order_id" value="{{ $item->id }}">
+                            <input type="hidden" name="id" value="{{ $item->id }}">
                             <div class="form-group">
                                 <label for="status">Estado</label>
-                                <select name="status" class="form-control" onchange="selectStatus(this,{{ $item->id }})"
-                                    value="{{ $item->status }}">
+                                <select name="status" class="form-control" value="{{ $item->status }}" required>
                                     <option value="">-- Seleccione -- </option>
-                                    <option value="aprobado" {{ $item->status == 'aprobado' ? 'selected' : '' }}>Aprobar
+                                    <option value="Aprobado" {{ $item->status == 'Aprobado' ? 'selected' : '' }}>Aprobar
                                     </option>
-                                    <option value="cancelado" {{ $item->status == 'cancelado' ? 'selected' : '' }}>
-                                        Cancelar
+                                    <option value="Rechazado" {{ $item->status == 'Rechazado' ? 'selected' : '' }}>
+                                        Rechazar
                                     </option>
                                 </select>
-                            </div>
-
-                            <div class="w-100 d-none" id="containerAprovedOrder{{$item->id}}">
-                                <div class="form-group">
-                                    <label for="">
-                                        Codigo de transacción
-                                    </label>
-                                    <input type="text" name="transaction_id" class="form-control"
-                                        value="{{ $item->transaction_id }}">
-                                </div>
-                                <div class="form-group d-none">
-                                    <label for="">
-                                        Fecha de pago
-                                    </label>
-                                    <input type="date" name="payment_at" id="payment_at" class="form-control"
-                                        value="{{ now()->format('Y-m-d') }}">
-                                </div>
-
-                                <div class="form-group d-none">
-                                    <label for="">
-                                        Monto de pago
-                                    </label>
-                                    <input type="number" name="amount_paid" id="amount_paid" class="form-control"
-                                        value="{{ $item->total }}">
-                                </div>
-                            </div>
-
-                            <div class="w-100 d-none" id="containerCancelOrder{{$item->id}}">
-                                <div class="form-group">
-                                    <label for="">
-                                        Motivo de cancelación
-                                    </label>
-                                    <textarea name="rejection_reason" id="reason" cols="30" rows="5" class="form-control"
-                                        id="rejection_reason{{ $item->id }}"></textarea>
-                                </div>
                             </div>
 
                             <div class="w-100 d-flex justify-content-end my-3">
@@ -192,7 +161,36 @@
                 </div>
             </div>
         </div>
-    @endforeach --}}
+
+        <div class="modal fade" id="basicModalGallery{{ $item->id }}">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Imagen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="container-image">
+                                    <div class="image" onclick="showImage(this)">
+                                        <img src="{{ asset('storage/' . $item->image_url) }}" alt=""
+                                            class="img-fluid" style="cursor: pointer; height:250px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection
 @section('scripts')
     <script>
@@ -211,21 +209,34 @@
         //     }
 
         // }
-        // $(function() {
-        //     $.validator.setDefaults({
-        //         submitHandler: function(form) {
-        //             // submit form
-        //             form.submit();
-        //         }
-        //     });
-        // });
-    </script>
+        $(function() {
+            $.validator.setDefaults({
+                submitHandler: function(form) {
+                    // submit form
+                    form.submit();
+                }
+            });
+        });
 
-    {{-- @foreach ($orders as $order)
+        
+    </script>
+        <script>
+            function showImage(image) {
+                var viewer = new Viewer(image, {
+                    inline: false,
+                    viewed: function() {
+                        viewer.zoomTo(0.6);
+                    }
+                });
+                viewer.show();
+            }
+        </script>
+
+    @foreach ($changeStatusRequests as $item)
         <script>
             $(function() {
 
-                $('#changeOrderStatus' + {{ $order->id }}).validate({
+                $('#changeStatusRequests' + {{ $item->id }}).validate({
                     rules: {
                         status: {
                             required: true,
@@ -250,5 +261,5 @@
                 });
             });
         </script>
-    @endforeach --}}
+    @endforeach
 @endsection
