@@ -213,8 +213,13 @@ class RaffleController extends Controller
             }
 
             $rafflesLiquided = Raffle::whereIn('id', $request->input('selectedItems'))->where('status', 'Liquidada')->exists();
-            if ($rafflesLiquided && $request->input('status') == "Liquidada") {
-                return redirect()->route('rifas.status')->with('error', 'No se puede liquidar una o mas rifas que ya se encuentra liquidada');
+            if($rafflesLiquided){
+                return redirect()->route('rifas.status')->with('error', 'No se puede cambiar el estado de una o mas rifas que ya se encuentra liquidada');
+            }
+
+            $rafflesPendingAprobation = Raffle::whereIn('id', $request->input('selectedItems'))->where('status', 'Por aprobar')->exists();
+            if ($rafflesPendingAprobation) {
+                return redirect()->route('rifas.status')->with('error', 'No se puede liquidar seleccionaste una o mas rifas que ya se encuentra por aprobar');
             }
 
             // $rafflesPagada = Raffle::whereIn('id', $request->input('selectedItems'))->where('status', 'Pagada')->exists();
@@ -272,6 +277,9 @@ class RaffleController extends Controller
                     //     $payment->image_payment_url = $changeStatusRequest->image_url;
                     //     $payment->save();
                     // }
+                }else{
+                    $raffle->status="Por aprobar";
+                    $raffle->save();
                 }
 
             }

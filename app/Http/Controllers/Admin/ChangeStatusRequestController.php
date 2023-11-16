@@ -57,6 +57,7 @@ class ChangeStatusRequestController extends Controller
                 $raffle->transaction_liquidation_id = $changeStatusRequest->transaction_id;
                 $raffle->liquidation_at = now();
                 $raffle->user_id = $changeStatusRequest->user_id;
+                $raffle->liquidation_image_url = $changeStatusRequest->image_url;
                 $raffle->save();
             }
         }

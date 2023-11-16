@@ -36,7 +36,7 @@
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
                             <div class="col-12">
-                                <a href="{{ route('rifas.status') }}" role="button" class="btn btn-danger"><i
+                                <a href="{{ route('change-status-requests.index') }}" role="button" class="btn btn-danger"><i
                                         class="fas fa-backward"></i> Volver</a>
                             </div>
                         </div>

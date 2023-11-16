@@ -34,6 +34,10 @@
                                 <option value="Pagada" @if ($status == 'Pagada') selected @endif>Pagada</option>
                                 <option value="Reservada" @if ($status == 'Reservada') selected @endif>Reservada
                                 </option>
+
+                                <option value="Por aprobar" @if ($status == 'Por aprobar') selected @endif>Por aprobar
+                                </option>
+
                             </select>
                         </div>
 
@@ -132,6 +136,8 @@
                                                     <span class="badge badge-info">{{ $item->status }}</span>
                                                 @elseif ($item->status == 'Reservada')
                                                     <span class="badge badge-secondary">{{ $item->status }}</span>
+                                                @elseif($item->status == 'Por aprobar')
+                                                    <span class="badge badge-warning">{{ $item->status }}</span>
                                                 @else
                                                     {{ $item->status }}
                                                 @endif
@@ -141,18 +147,19 @@
                                             <td>{{ $item->secondUser?->short_name }}</td>
                                             <td>{{ $item->thirdUser?->short_name }}</td>
                                             <td>{{ $item->created_at->format('d/m/Y') }}</td>
-                                            <td>{{ $item->transaction_id  }} - {{$item->transaction_liquidation_id}}</td>
+                                            <td>{{ $item->transaction_id }} - {{ $item->transaction_liquidation_id }}</td>
                                             <td>
                                                 {{ $item->userGestor?->name }}
                                             </td>
                                             <td style="width:30px" class="d-flex">
-                                                <i class="fa fa-pen" data-toggle="modal" data-target="#basicModalEdit{{ $item->id }}" role="button"></i>
+                                                <i class="fa fa-pen" data-toggle="modal"
+                                                    data-target="#basicModalEdit{{ $item->id }}" role="button"></i>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                            
+
                             <div class="d-flex justify-content-between">
                                 <div class="mt-2">
                                     <p>Mostrando {{ $raffles->firstItem() }} a {{ $raffles->lastItem() }} de

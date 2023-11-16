@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('number');
             $table->string('code');
             $table->string("url_image")->nullable();
-            $table->enum('status', ["Liquidada", "Stock", "Fiada", "Pagada", "Reservada"])->default("Stock");
+            $table->enum('status', ["Liquidada",'Por aprobar', "Stock", "Fiada", "Pagada", "Reservada"])->default("Stock");
             $table->boolean('is_visible_in_web')->default(false);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_available')->default(true);
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id')->nullable();
             $table->text('transaction_id')->nullable();
             $table->text('transaction_liquidation_id')->nullable();
+            $table->text('liquidation_image_url')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->dateTime('liquidation_at')->nullable();
             $table->dateTime('payment_at')->nullable();

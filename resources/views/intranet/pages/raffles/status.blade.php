@@ -24,34 +24,46 @@
 
                         <div class="col-md-3 mb-3">
                             <label>Estado</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="status[]" value="Liquidada" id="status-liquidada" @if(in_array('Liquidada', $status)) checked @endif>
-                                <label class="form-check-label" for="status-liquidada">
-                                    Liquidada
-                                </label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="status[]" value="Liquidada"
+                                            id="status-liquidada" @if (in_array('Liquidada', $status)) checked @endif>
+                                        <label class="form-check-label" for="status-liquidada">
+                                            Liquidada
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="status[]" value="Stock"
+                                            id="status-stock" @if (in_array('Stock', $status)) checked @endif>
+                                        <label class="form-check-label" for="status-stock">
+                                            Stock
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="status[]" value="Pagada"
+                                            id="status-pagada" @if (in_array('Pagada', $status)) checked @endif>
+                                        <label class="form-check-label" for="status-pagada">
+                                            Pagada
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="status[]" value="Reservada"
+                                            id="status-reservada" @if (in_array('Reservada', $status)) checked @endif>
+                                        <label class="form-check-label" for="status-reservada">
+                                            Reservada
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="status[]" value="Stock" id="status-stock" @if(in_array('Stock', $status)) checked @endif>
-                                <label class="form-check-label" for="status-stock">
-                                    Stock
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="status[]" value="Pagada" id="status-pagada" @if(in_array('Pagada', $status)) checked @endif>
-                                <label class="form-check-label" for="status-pagada">
-                                    Pagada
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="status[]" value="Reservada" id="status-reservada" @if(in_array('Reservada', $status)) checked @endif>
-                                <label class="form-check-label" for="status-reservada">
-                                    Reservada
-                                </label>
-                            </div>
+
+
                         </div>
 
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label for="user_id"> Ingrese un rango de numeros</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="start" value="{{ $start }}"
@@ -73,7 +85,7 @@
                         @endif
 
                         @foreach (range(1, 3) as $index)
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label for="user_id_{{ $index }}">Usuario {{ $index }}</label>
                                 <select name="user_id_{{ $index }}" class="form-control">
                                     <option value="" selected>Seleccione</option>
@@ -131,17 +143,17 @@
                                         <div class="form-group">
 
                                             <label for="status">Mover a: </label>
-                                            <select name="status" class="form-control" 
-                                                id="selectStatusDestinatation">
+                                            <select name="status" class="form-control" id="selectStatusDestinatation">
                                                 <option value="Liquidada"
                                                     @if ($status == 'Liquidada') selected @endif>
                                                     Liquidada</option>
                                                 <option value="Stock" @if ($status == 'Stock') selected @endif>
                                                     Stock
                                                 </option>
-                                                {{-- <option value="Fiada" @if ($status == 'Fiada') selected @endif>
-                                                    Fiada
-                                                </option> --}}
+                                                <option value="Por aprobar"
+                                                    @if ($status == 'Por aprobar') selected @endif>
+                                                    Por aprobar
+                                                </option>
                                                 <option value="Pagada" @if ($status == 'Pagada') selected @endif>
                                                     Pagada</option>
                                                 <option value="Reservada"
@@ -191,6 +203,7 @@
                                             <th>Usuario 3</th>
                                             <th>Cod. operación</th>
                                             <th>Fecha creación</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -213,6 +226,8 @@
                                                         <span class="badge badge-info">{{ $item->status }}</span>
                                                     @elseif ($item->status == 'Reservada')
                                                         <span class="badge badge-secondary">{{ $item->status }}</span>
+                                                    @elseif($item->status == 'Por aprobar')
+                                                        <span class="badge badge-warning">{{ $item->status }}</span>
                                                     @else
                                                         {{ $item->status }}
                                                     @endif
@@ -221,16 +236,21 @@
                                                 <td>{{ $item->firstUser?->short_name }}</td>
                                                 <td>{{ $item->secondUser?->short_name }}</td>
                                                 <td>{{ $item->thirdUser?->short_name }}</td>
-                                                <td>{{ $item->transaction_id }}</td>
+                                                <td>{{ $item->transaction_id }} - {{ $item->transaction_liquidation_id }}
+                                                </td>
                                                 <td>{{ $item->created_at->format('d/m/Y') }}</td>
-
+                                                <td>
+                                                    <i class="fa fa-image" data-toggle="modal"
+                                                        data-target="#basicModalGallery{{ $item->id }}">
+                                                    </i>
+                                                </td>
                                             </tr>
                                         @endforeach
 
                                         <tr>
                                             <td colspan="3"></td>
                                             <td>Total</td>
-                                            <td>{{number_format(($raffles->total() * 20),2)}}</td>
+                                            <td>{{ number_format($raffles->total() * 20, 2) }}</td>
                                             <td colspan="2"></td>
                                         </tr>
                                     </tbody>
@@ -255,6 +275,39 @@
         </div>
     </div>
     <!-- Column ends -->
+
+    @foreach ($raffles as $item)
+        <div class="modal fade" id="basicModalGallery{{ $item->id }}">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Imagen de liquidación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @if ($item->liquidation_image_url)
+                                <div class="col-md-4 text-center">
+                                    <div class="container-image">
+                                        <div class="image" onclick="showImage(this)">
+                                            <img src="{{ asset('storage/' . $item->liquidation_image_url) }}"
+                                                alt="" class="img-fluid" style="cursor: pointer; height:250px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection
 @section('scripts')
     <script>
