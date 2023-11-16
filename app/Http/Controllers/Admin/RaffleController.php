@@ -177,7 +177,7 @@ class RaffleController extends Controller
         $user_id_1 = $request->query('user_id_1');
         $user_id_2 = $request->query('user_id_2');
         $user_id_3 = $request->query('user_id_3');
-        $status = $request->query('status');
+        $status = $request->query('status',[]);
         $start = $request->query('start');
         $end = $request->query('end');
 
@@ -188,9 +188,10 @@ class RaffleController extends Controller
         }
 
         $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser', 'raffleImages')
-            ->byStatus($request->query('status'))
+            ->byStatus2($request->query('status',[]))
             ->bySearch($search)
             ->betweenNumber($start, $end)
+            ->byRoleUser()
             ->paginate($paginateRows);
 
         $users = User::orderBy('name', 'asc')->get();
@@ -282,4 +283,7 @@ class RaffleController extends Controller
             return redirect()->route('rifas.status')->with('error', 'Error al actualizar la rifa: ' . $e->getMessage());
         }
     }
+
+
+
 }

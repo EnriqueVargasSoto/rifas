@@ -17,7 +17,9 @@ class ChangeStatusRequestController extends Controller
     {
         //
 
-        $changeStatusRequests = ChangeStatusRequest::with('user', 'userGestion')->byUserId($request->query('user_id'))
+        $changeStatusRequests = ChangeStatusRequest::with('user', 'userGestion')
+            ->withCount('changeStatusRaffles')            
+            ->byUserId($request->query('user_id'))
             ->orderBy('created_at', 'desc')->paginate(12);
 
         $users = User::all();
@@ -107,5 +109,10 @@ class ChangeStatusRequestController extends Controller
     public function destroy(ChangeStatusRequest $changeStatusRequest)
     {
         //
+    }
+    public function requestChangeStatusDetail(Request $request, $id)
+    {
+        $changeStatusRequest = ChangeStatusRequest::with('changeStatusRaffles.raffle')->find($id);
+        return view('intranet.pages.change_status_request.show', compact('changeStatusRequest'));
     }
 }

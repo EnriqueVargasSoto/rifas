@@ -53,6 +53,15 @@ class Raffle extends Model
         return $query;
     }
 
+    public function scopeByStatus2($query, $status2 = null)
+    {
+        if (count($status2)) {
+            return $query->whereIn('status', $status2);
+        }
+        return $query;
+    }
+
+
     public function scopeBySelected($query, $selected)
     {
         if ($selected) {
@@ -125,5 +134,16 @@ class Raffle extends Model
             return $query->where('user_id_3', $user_id_3);
         }
         return $query;
+    }
+
+
+    public function scopeByRoleUser($query){
+        if(auth()->user()->role->role == 'Super Admin'){
+            return $query;
+        }
+
+        return $query->where('user_id_1', auth()->user()->id)
+            ->orWhere('user_id_2', auth()->user()->id)
+            ->orWhere('user_id_3', auth()->user()->id);
     }
 }

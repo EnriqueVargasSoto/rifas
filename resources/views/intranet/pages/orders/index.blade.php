@@ -64,6 +64,7 @@
                                         <th class="text-right">Total</th>
                                         <th>Cliente</th>
                                         <th>Telefono</th>
+                                        <th>Codigo de transaccion</th>
                                         <th style="width:25px">Acciones</th>
                                     </tr>
                                 </thead>
@@ -81,7 +82,10 @@
                                             </td>
                                             <td class="text-right">{{ $item->total }}</td>
                                             <td>{{ $item->client_name }} {{ $item->client_last_name }}</td>
-                                            <td>{{ $item->phone }}</td>
+                                            <td>{{ $item->client_phone }}</td>
+                                            <td>
+                                                {{ $item->transaction_id ? $item->transaction_id : '' }}
+                                            </td>
                                             <td style="width:30px" class="d-flex">
                                                 <a class="fa fa-eye text-primary mx-2" role="button"
                                                     href="{{ route('orders.show', $item->id) }}"></a>

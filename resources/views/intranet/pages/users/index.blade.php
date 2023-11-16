@@ -173,6 +173,14 @@
                                     <input type="text" name="area" class="form-control input-default ">
                                 </div>
                             </div>
+                            <div class="mb-3 col-md-6">
+                                <div class="form-group">
+                                    <label for="">
+                                        Direccion
+                                    </label>
+                                    <input type="text" name="address" class="form-control input-default ">
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -297,11 +305,16 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
-
-
                                         <h4 class="card-title">Área</h4>
                                         <input type="text" name="area" class="form-control input-default"
                                             value="{{ $item->area }}">
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <div class="form-group">
+                                        <h4 class="card-title">Direccion</h4>
+                                        <input type="text" name="address" class="form-control input-default"
+                                            value="{{ $item->address }}">
                                     </div>
                                 </div>
                             </div>
@@ -367,25 +380,7 @@
         $(function() {
             $('#formCreateUser').validate({
                 rules: {
-                    name: {
-                        required: true,
-                    },
-                    dni: {
-                        required: true,
-                    },
-                    short_name: {
-                        required: true,
-                    },
                     phone: {
-                        required: true,
-                    },
-                    unit: {
-                        required: true,
-                    },
-                    area: {
-                        required: true,
-                    },
-                    position: {
                         required: true,
                     },
                     password: {
@@ -394,29 +389,10 @@
                     email: {
                         required: true,
                     }
-
                 },
                 messages: {
-                    name: {
-                        required: "Por favor ingrese un nombre",
-                    },
-                    dni: {
-                        required: "Por favor ingrese un dni",
-                    },
-                    short_name: {
-                        required: "Por favor ingrese un nombre corto",
-                    },
                     phone: {
                         required: "Por favor ingrese un teléfono",
-                    },
-                    unit: {
-                        required: "Por favor ingrese una unidad",
-                    },
-                    area: {
-                        required: "Por favor ingrese un área",
-                    },
-                    position: {
-                        required: "Por favor ingrese una posición",
                     },
                     password: {
                         required: "Por favor ingrese un password",

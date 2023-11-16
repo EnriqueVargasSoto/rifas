@@ -34,17 +34,18 @@ class UserController extends Controller
     {
         $users = User::create([
             'role_id' => 2,
-            'name' => $request->name,
-            'dni' => $request->dni,
-            'short_name' => $request->short_name,
-            'phone' => $request->phone,
-            'unit' => $request->unit,
-            'area' => $request->area,
-            'position' => $request->position,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'clave' => $request->password,
-            'observation' => $request->observation
+            'name' => $request->input('name'),
+            'dni' => $request->input('dni'),
+            'short_name' => $request->input('short_name'),
+            'phone' => $request->input('phone'),
+            'unit' => $request->input('unit'),
+            'area' => $request->input('area'),
+            'position' => $request->input('position'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+            'clave' => $request->input('password'),
+            'observation' => $request->input('observation'),
+            'address' => $request->input('address')
         ]);
 
         return back();
@@ -63,7 +64,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('intranet.pages.users.update', compact('user'));
     }
 
     /**
@@ -71,27 +73,38 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        if(!$request->password){
+            return back()->with('error', 'La contraseña es obligatoria');
+        }
         //
-            $user = User::find($id);
-            $user->name = $request->name;
-            $user->dni  = $request->dni;
-            $user->short_name = $request->short_name;
-            $user->phone = $request->phone;
-            $user->unit = $request->unit;
-            $user->area = $request->area;
-            $user->position = $request->position;
-            $user->email = $request->email;
-            $user->password = bcrypt($request->password);
-            $user->clave = $request->password;
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->dni  = $request->dni;
+        $user->short_name = $request->short_name;
+        $user->phone = $request->phone;
+        $user->unit = $request->unit;
+        $user->area = $request->area;
+        $user->position = $request->position;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->clave = $request->password;
+        $user->address = $request->address;
+
+        if ($request->observation) {
             $user->observation = $request->observation;
-            $user->show_information_in_web = $request->input('show_information_in_web',0);
-            $user->save();
+        }
+        if(in_array($request->input('show_information_in_web'),[0,1])){
+            $user->show_information_in_web = $request->input('show_information_in_web', 0);
+        }
 
-            if($user->show_information_in_web==1){
-                User::where('id','!=',$user->id)->update(['show_information_in_web'=>0]);
-            }
+        $user->save();
 
-        return back();
+        if ($user->show_information_in_web == 1) {
+            User::where('id', '!=', $user->id)->update(['show_information_in_web' => 0]);
+        }
+
+        return back()->with('success', 'Usuario actualizado correctamente');
     }
 
     /**

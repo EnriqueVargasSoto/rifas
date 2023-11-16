@@ -59,6 +59,11 @@ class RegisterClientController extends Controller
 
     public function showClientUpdateForm()
     {
+
+        if(!auth()->guard('client')->check()){
+            return redirect()->route('login-client-view');
+        }
+
         $client = Client::find(auth()->guard('client')->user()->id);
         return view('update-client', compact('client'));
     }

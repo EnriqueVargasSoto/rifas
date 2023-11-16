@@ -2,6 +2,16 @@
 
 @section('content')
     <div class="row">
+        <div class="col-md-12 mb-1">
+            <div class="">
+                <a href="{{ route('purchases.index') }}" class="btn btn-primary d-md-none btn-block">
+                    Ver mis compras
+                </a>
+                <a href="{{ route('welcome') }}" class="btn btn-primary d-md-none btn-block">
+                    Seguir comprando
+                </a>
+            </div>
+        </div>
         <div class="col-md-4"></div>
         <div class="col-md-4">
 

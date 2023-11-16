@@ -1,9 +1,21 @@
 @extends('layouts.public-layout.layout')
-
 @section('content')
     <div class="container-fluid">
 
         <div class="row">
+            <div class="col-md-12 mb-1">
+                <div class="">
+                    <a href="{{ route('client-update-view')  }}" class="btn btn-primary d-md-none btn-block">
+                        Actualizar mis datos
+                    </a>
+                    <a href="{{ route('purchases.index') }}" class="btn btn-primary d-md-none btn-block">
+                        Ver mis compras
+                    </a>
+                    <a href="{{ route('welcome') }}" class="btn btn-primary d-md-none btn-block">
+                        Seguir comprando
+                    </a>
+                </div>
+            </div>
             <div class="col-md-4 order-md-1">
                 <div class="w-100 text-center">
                     <img src="{{ asset('yape.jpg') }}" style="width:200px" alt="">

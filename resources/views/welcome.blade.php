@@ -2,19 +2,7 @@
 
 @section('content')
     <div class="container">
-        {{-- <div class="w-100 my-3">
-            <form action="{{ route('welcome') }}" method="GET">
-                <label for="">
-                    Buscar por un rango de números
-                </label>
-                <div class="input-group">
-                    <input type="text" class="form-control" name="start" placeholder="Inicio" value="{{ $start }}">
-                    <input type="text" class="form-control" name="end" placeholder="Fin" value="{{ $end }}">
-                    <button class="btn btn-primary" type="submit">Buscar</button>
-                </div>
-            </form>
 
-        </div> --}}
         @if (session('success-add-cart'))
             <div class="alert alert-success">
                 {{ session('success-add-cart') }}
@@ -28,6 +16,14 @@
         @endif
 
         @auth('client')
+            <div class="w-100">
+
+
+                <a href="{{ route('purchases.index') }}" class="btn btn-primary d-md-none btn-block">
+                    Ver mis compras
+                </a>
+            </div>
+
             @if (count(session('cart', [])))
                 <div class="alert alert-info">
                     <b>Mi carrito: </b> <b>Rifas: </b> {{ count(session('cart')) }} <b>Total</b> :
@@ -36,7 +32,20 @@
                     </a>
                 </div>
             @endif
+        @else
+            <div class="w-100">
+                <a href="{{ route('register-client') }}" class="btn btn-primary d-md-none btn-block">
+                    Ingresar
+                </a>
+
+                <a href="{{ route('register-client') }}" class="btn btn-primary d-md-none btn-block">
+                    Ver mis compras
+                </a>
+            </div>
         @endauth
+
+
+
         <div class="container">
             <div class="row">
                 @foreach ($raffles as $rifa)
@@ -46,18 +55,20 @@
                                 <!-- Contenido de cada elemento -->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 100 100">
                                     <!-- Círculo exterior con radio 45 -->
-                                    <circle cx="50" cy="50" r="45" fill="white" stroke="white" stroke-width="2" />
-            
+                                    <circle cx="50" cy="50" r="45" fill="white" stroke="white"
+                                        stroke-width="2" />
+
                                     <!-- Número en el centro con posición ajustada -->
-                                    <text x="50" y="55" font-size="20" text-anchor="middle" fill="black">{{ $rifa->number }}</text>
+                                    <text x="50" y="55" font-size="20" text-anchor="middle"
+                                        fill="black">{{ $rifa->number }}</text>
                                 </svg>
-            
+
                                 <h2 class="mt-2 h4 font-semibold text-gray-900">#{{ $rifa->code }}</h2>
                                 <form action="{{ route('cart.addItem') }}" method="POST" class="my-3">
                                     @csrf
                                     <input type="hidden" value="{{ $rifa->id }}" name="id">
                                     <button type="submit" class="btn btn-outline-light">
-                                        <i class="fa fa-shopping-cart"></i> Agregar 
+                                        <i class="fa fa-shopping-cart"></i> Agregar
                                     </button>
                                 </form>
                             </div>
@@ -67,10 +78,10 @@
             </div>
         </div>
 
-        
-        
-        
-        
+
+
+
+
 
         <div class="d-flex justify-content-between container">
             @if (count($raffles))

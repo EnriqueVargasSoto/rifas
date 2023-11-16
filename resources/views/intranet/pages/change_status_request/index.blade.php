@@ -65,6 +65,15 @@
                                         <th>
                                             Aprobado por
                                         </th>
+                                        <th>
+                                            Cant. rifas
+                                        </th>
+                                        <th>
+                                            Monto total
+                                        </th>
+                                        <th>
+                                            Cod. operación
+                                        </th>
                                         <th>Cambiar rifas a </th>
                                         <th style="width:25px">Acciones</th>
                                     </tr>
@@ -84,6 +93,18 @@
                                             <td>{{ $item->user?->name }} {{ $item->user?->last_name }}</td>
                                             <td>{{ $item->userGestion?->name }} {{ $item->userGestion?->last_name }}</td>
                                             <td>
+                                                {{$item->change_status_raffles_count}}
+                                            </td>
+
+                                            <td>
+                                                {{ number_format(($item->change_status_raffles_count* 20), 2) }}
+                                            </td>
+
+                                            <td>
+                                                {{ $item->transaction_id }}
+                                            </td>
+
+                                            <td>
                                                 @if ($item->status_request == 'Liquidada')
                                                     <span class="badge badge-success">{{ $item->status_request }}</span>
                                                 @elseif ($item->status_request == 'Stock')
@@ -102,6 +123,9 @@
                                                 <i class="fa fa-image text-info" data-toggle="modal"
                                                     data-target="#basicModalGallery{{ $item->id }}" role="button"></i>
 
+                                                <a href="{{route('rifas.requestChangeStatusDetail',$item->id)}}" >
+                                                    <i class="fa fa-eye text-primary ml-2" role="button"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

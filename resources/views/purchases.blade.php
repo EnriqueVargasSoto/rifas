@@ -1,9 +1,21 @@
 @extends('layouts.public-layout.layout')
 @section('content')
     <div class="container-fluid">
-        <div class="alert alert-info">
-            Actualizar información de usuario <a href="{{ route('client-update-view') }}">aquí</a>
+
+        <div class="row">
+            <div class="col-md-12 mb-1">
+                <div class="">
+                    <a href="{{ route('client-update-view')  }}" class="btn btn-primary d-md-none btn-block">
+                        Actualizar mis datos
+                    </a>
+
+                    <a href="{{ route('welcome') }}" class="btn btn-primary d-md-none btn-block">
+                        Seguir comprando
+                    </a>
+                </div>
+            </div>
         </div>
+
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}

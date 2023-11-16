@@ -43,7 +43,7 @@
     {{-- header --}}
 
     @include('layouts.public-layout.header')
-    <div class="pricing-header px-3 py-5 pt-md-5 pb-md-4 mx-auto text-center" style="margin-top: 30px">
+    <div class="pricing-header px-3 py-4 pt-md-5 pb-md-4 mx-auto text-center" style="margin-top: 30px">
 
     </div>
 

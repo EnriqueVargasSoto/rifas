@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('role_id')->constrained();
-            $table->string('name');
-            $table->string('dni');
-            $table->string('short_name');
-            $table->string('phone');
-            $table->string('unit');
-            $table->string('area');
-            $table->string('position');
+            $table->string('name')->nullable();
+            $table->string('dni')->nullable();
+            $table->string('short_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('unit')->nullable();
+            $table->string('area')->nullable();
+            $table->string('position')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('observation')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('show_information_in_web')->default(0);
+            $table->string('address')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

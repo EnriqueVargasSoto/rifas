@@ -50,9 +50,9 @@
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" style="">
-                    <div class="dropdown-item">
+                    <a class="dropdown-item" href="{{route('users.edit',Auth()->user()->id)}}">
                         {{ Auth()->user()->name  }}
-                    </div>
+                    </a>
                     <a href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                         class="dropdown-item ai-icon">

@@ -9,8 +9,6 @@
                 <div class="w-100 d-flex justify-content-between">
                     <h3 class="card-title">Lista de Rifas</h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"><i
-                                class="fa-solid fa fa-plus mx-2"></i>Nueva rifa</button>
                     </div>
                 </div>
                 <form action="{{ route('rifas.status') }}" method="GET">
@@ -25,17 +23,31 @@
 
 
                         <div class="col-md-3 mb-3">
-                            <label for="status">Estado</label>
-                            <select name="status" class="form-control" value="{{ $status }}">
-                                <option value="" selected>Seleccione</option>
-                                <option value="Liquidada" @if ($status == 'Liquidada') selected @endif>Liquidada
-                                </option>
-                                <option value="Stock" @if ($status == 'Stock') selected @endif>Stock</option>
-                                {{-- <option value="Fiada" @if ($status == 'Fiada') selected @endif>Fiada</option> --}}
-                                <option value="Pagada" @if ($status == 'Pagada') selected @endif>Pagada</option>
-                                <option value="Reservada" @if ($status == 'Reservada') selected @endif>Reservada
-                                </option>
-                            </select>
+                            <label>Estado</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="status[]" value="Liquidada" id="status-liquidada" @if(in_array('Liquidada', $status)) checked @endif>
+                                <label class="form-check-label" for="status-liquidada">
+                                    Liquidada
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="status[]" value="Stock" id="status-stock" @if(in_array('Stock', $status)) checked @endif>
+                                <label class="form-check-label" for="status-stock">
+                                    Stock
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="status[]" value="Pagada" id="status-pagada" @if(in_array('Pagada', $status)) checked @endif>
+                                <label class="form-check-label" for="status-pagada">
+                                    Pagada
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="status[]" value="Reservada" id="status-reservada" @if(in_array('Reservada', $status)) checked @endif>
+                                <label class="form-check-label" for="status-reservada">
+                                    Reservada
+                                </label>
+                            </div>
                         </div>
 
 
@@ -58,23 +70,22 @@
                                     <option value="0" @if ($is_visible_in_web == 0) selected @endif>No</option>
                                 </select>
                             </div>
-
-
-                            @foreach (range(1, 3) as $index)
-                                <div class="col-md-4 mb-3">
-                                    <label for="user_id_{{ $index }}">Usuario {{ $index }}</label>
-                                    <select name="user_id_{{ $index }}" class="form-control">
-                                        <option value="" selected>Seleccione</option>
-                                        @foreach ($users as $user)
-                                            <option value="{{ $user->id }}"
-                                                @if ($user->id == ${"user_id_$index"}) selected @endif>
-                                                {{ $user->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endforeach
                         @endif
+
+                        @foreach (range(1, 3) as $index)
+                            <div class="col-md-4 mb-3">
+                                <label for="user_id_{{ $index }}">Usuario {{ $index }}</label>
+                                <select name="user_id_{{ $index }}" class="form-control">
+                                    <option value="" selected>Seleccione</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}"
+                                            @if ($user->id == ${"user_id_$index"}) selected @endif>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endforeach
 
                         <div class="col-md-2 mt-4">
 
@@ -109,11 +120,10 @@
 
                     </div>
                 @endif
-                <div class="tab-pane fade show active"  role="tabpanel"
-                    aria-labelledby="home-tab-3">
+                <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab-3">
                     <div class="card-body pt-0">
-                        <form action="{{ route('rifas.requestChangeStatus') }}" id="formCreateRequestChangeStatus" method="post"
-                            enctype="multipart/form-data">
+                        <form action="{{ route('rifas.requestChangeStatus') }}" id="formCreateRequestChangeStatus"
+                            method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="w-100">
                                 <div class="row my-2">
@@ -121,7 +131,7 @@
                                         <div class="form-group">
 
                                             <label for="status">Mover a: </label>
-                                            <select name="status" class="form-control" value="{{ $status }}"
+                                            <select name="status" class="form-control" 
                                                 id="selectStatusDestinatation">
                                                 <option value="Liquidada"
                                                     @if ($status == 'Liquidada') selected @endif>
@@ -142,13 +152,12 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3" id="image_request">
-                                        <div class="form-group" >
+                                        <div class="form-group">
 
                                             <label for="">
                                                 Seleccione imagen de comprobante
                                             </label>
-                                            <input type="file" class="form-control" name="image" 
-                                                accept="image/*">
+                                            <input type="file" class="form-control" name="image" accept="image/*">
                                         </div>
                                     </div>
                                     <div class="col-md-3" id="transaction_id_request">
@@ -156,8 +165,7 @@
                                             <label for="">
                                                 Codigo de transacción
                                             </label>
-                                            <input type="text" class="form-control" name="transaction_id"
-                                                >
+                                            <input type="text" class="form-control" name="transaction_id">
                                         </div>
 
                                     </div>
@@ -173,7 +181,7 @@
                                         <tr>
                                             <th style="width: 15px">#</th>
                                             <th>
-                                                <input type="checkbox" id="selectAll"> Marcar Todos
+                                                <input type="checkbox" id="selectAll">
                                             </th>
                                             <th>Codigo</th>
                                             <th>Estado</th>
@@ -181,6 +189,7 @@
                                             <th>Usuario 1</th>
                                             <th>Usuario 2</th>
                                             <th>Usuario 3</th>
+                                            <th>Cod. operación</th>
                                             <th>Fecha creación</th>
                                         </tr>
                                     </thead>
@@ -193,15 +202,37 @@
                                                         value="{{ $item->id }}">
                                                 </td>
                                                 <td>{{ $item->code }}</td>
-                                                <td>{{ $item->status }}</td>
+                                                <td>
+                                                    @if ($item->status == 'Liquidada')
+                                                        <span class="badge badge-success">{{ $item->status }}</span>
+                                                    @elseif ($item->status == 'Stock')
+                                                        <span class="badge badge-primary">{{ $item->status }}</span>
+                                                    @elseif ($item->status == 'Fiada')
+                                                        <span class="badge badge-warning">{{ $item->status }}</span>
+                                                    @elseif ($item->status == 'Pagada')
+                                                        <span class="badge badge-info">{{ $item->status }}</span>
+                                                    @elseif ($item->status == 'Reservada')
+                                                        <span class="badge badge-secondary">{{ $item->status }}</span>
+                                                    @else
+                                                        {{ $item->status }}
+                                                    @endif
+                                                </td>
                                                 <td>{{ $item->price }}</td>
                                                 <td>{{ $item->firstUser?->short_name }}</td>
                                                 <td>{{ $item->secondUser?->short_name }}</td>
                                                 <td>{{ $item->thirdUser?->short_name }}</td>
+                                                <td>{{ $item->transaction_id }}</td>
                                                 <td>{{ $item->created_at->format('d/m/Y') }}</td>
 
                                             </tr>
                                         @endforeach
+
+                                        <tr>
+                                            <td colspan="3"></td>
+                                            <td>Total</td>
+                                            <td>{{number_format(($raffles->total() * 20),2)}}</td>
+                                            <td colspan="2"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

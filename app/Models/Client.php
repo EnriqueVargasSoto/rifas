@@ -22,7 +22,6 @@ class Client extends Authenticatable
         if ($term) {
             return $query->where('name', 'like', '%' . $term . '%')
                 ->orWhere('last_name', 'like', '%' . $term . '%')
-                ->orWhere('email', 'like', '%' . $term . '%')
                 ->orWhere('phone', 'like', '%' . $term . '%');
         }
         return $query;

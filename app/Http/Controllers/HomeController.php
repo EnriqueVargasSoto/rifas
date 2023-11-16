@@ -24,7 +24,7 @@ class HomeController extends Controller
     public function index()
     {
         $auth = Auth()->user();
-        switch ($auth->role_id) {
+        switch ($auth->role->role=="Super Admin") {
             case 1:
                 # code...
                 return redirect()->route('users.index');
@@ -32,7 +32,7 @@ class HomeController extends Controller
 
             default:
                 # code...
-                return view('home');
+                return redirect()->route('rifas.status');
                 break;
         }
 
