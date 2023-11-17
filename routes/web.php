@@ -30,6 +30,17 @@ Route::get('/', [RaffleControllerPublic::class, 'index'])->name('welcome');
 
 
 Auth::routes();
+// uuid value example: 1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed
+ // other example whit diferent uuid value: 2adff3d4-ff2b-4c15-9f9c-1d92eeb8e1a1
+ 
+
+Route::get('/user-register/1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed', [App\Http\Controllers\UserRegisterController::class, 'showRegistrationUserForm'])->name('registerUser');
+Route::post('/user-register/store', [App\Http\Controllers\UserRegisterController::class, 'userRegister'])->name('user.register-store');
+
+
+Route::get('/admin-register/2adff3d4-ff2b-4c15-9f9c-1d92eeb8e1a1', [App\Http\Controllers\UserRegisterController::class, 'showRegistrationAdminForm'])->name('registerAdmin');
+Route::post('/admin-register/store', [App\Http\Controllers\UserRegisterController::class, 'adminRegister'])->name('admin.register-store');
+
 
 Route::get('/client/login', [LoginClientController::class, 'showClientLoginForm'])->name('login-client-view');
 Route::post('/client/login', [LoginClientController::class, 'login'])->name('login-client');

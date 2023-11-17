@@ -48,7 +48,7 @@
                         </p>
                     </a>
                 </li>
-                @if (auth('web')->user()->role->role == 'Super Admin')
+                @if (auth('web')->user()->role->role == 'Super Admin' || auth('web')->user()->role->role == 'Administrador')
                     <li class="nav-item ">
                         <a href="{{ route('change-status-requests.index') }}"
                             class="nav-link {{ request()->is('change-status-requests') ? 'active' : '' }}">
@@ -58,6 +58,8 @@
                             </p>
                         </a>
                     </li>
+                @endif
+                    @if (auth('web')->user()->role->role == 'Super Admin' )
                     <li class="nav-item ">
                         <a href="{{ route('assignaciones.index') }}"
                             class="nav-link {{ request()->is('assignaciones') ? 'active' : '' }}">

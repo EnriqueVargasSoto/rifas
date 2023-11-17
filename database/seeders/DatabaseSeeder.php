@@ -32,6 +32,10 @@ class DatabaseSeeder extends Seeder
             'id' => 2,
             'role' => 'Responsable'
         ]);
+        Role::create([
+            'id' => 3,
+            'role' => 'Administrador'
+        ]);
 
         User::create([
             'role_id' => 1,
