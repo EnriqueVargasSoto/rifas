@@ -25,6 +25,9 @@ return new class extends Migration
             $table->dateTime('cancelled_at')->nullable();
             $table->enum('status',['reservado','aprobado', 'cancelado'])->default('reservado');
             $table->text('rejection_reason')->nullable();
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

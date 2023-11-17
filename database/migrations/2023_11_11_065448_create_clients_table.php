@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('password');
             $table->string('clave');
             $table->text('observation')->nullable();
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

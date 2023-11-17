@@ -29,6 +29,9 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('show_information_in_web')->default(0);
             $table->string('address')->nullable();
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

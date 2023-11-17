@@ -19,6 +19,9 @@ return new class extends Migration
             $table->integer('quantity')->default(0);
             $table->decimal('total', 10, 2)->default(0);
             $table->enum('status', ['reservado', 'aprobado'])->default('reservado');
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -22,6 +22,9 @@ return new class extends Migration
             $table->text('codes')->nullable();
             $table->boolean('is_visible_in_web')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

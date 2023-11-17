@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('image_payment_url')->nullable();
             $table->enum('model', ['order', 'raffle']);
             $table->dateTime('payment_at')->nullable();
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

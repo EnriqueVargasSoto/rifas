@@ -21,6 +21,9 @@ return new class extends Migration
             $table->dateTime('rejected_at')->nullable();
             $table->text('transaction_id')->nullable();
             $table->text('image_url')->nullable();
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

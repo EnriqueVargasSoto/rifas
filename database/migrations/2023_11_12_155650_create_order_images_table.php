@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('image_url')->nullable();
             $table->unsignedBigInteger('order_id');
             $table->enum('type', ['payment', 'invoice','raffle'])->default('payment');
+            $table->string("custom_column_1")->nullable();
+            $table->string("custom_column_2")->nullable();
+            $table->string("custom_column_3")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
