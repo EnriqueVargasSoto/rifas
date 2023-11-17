@@ -71,7 +71,7 @@ class AssignmentController extends Controller
                     $columnsUpdate['is_visible_in_web'] = $isVisibleInWeb;
                 }
 
-                Raffle::whereIn('number', $numbersClean)->update($columnsUpdate);
+                Raffle::whereIn('number', $numbersClean)->where('status',"Stock")->update($columnsUpdate);
                 $assignment->type = 'codigos';
                 $assignment->save();
 
@@ -88,7 +88,7 @@ class AssignmentController extends Controller
                     $columnsUpdate['is_visible_in_web'] = $isVisibleInWeb;
                 }
 
-                $raffles = Raffle::whereBetween('number', [$assignment->start, $assignment->end])->update(
+                $raffles = Raffle::whereBetween('number', [$assignment->start, $assignment->end])->where('status',"Stock")->update(
                     $columnsUpdate
                 );
                 $assignment->type = 'rango';

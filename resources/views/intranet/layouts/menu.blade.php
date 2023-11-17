@@ -18,7 +18,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
-                @if (auth('web')->user()->role->role == 'Super Admin')
+                @if (auth('web')->user()->role->role == 'Super Admin' || auth('web')->user()->role->role == 'Administrador')
                     <li class="nav-item ">
                         <a href="{{ route('users.index') }}"
                             class="nav-link {{ request()->is('users') ? 'active' : '' }}">
@@ -58,8 +58,7 @@
                             </p>
                         </a>
                     </li>
-                @endif
-                    @if (auth('web')->user()->role->role == 'Super Admin' )
+
                     <li class="nav-item ">
                         <a href="{{ route('assignaciones.index') }}"
                             class="nav-link {{ request()->is('assignaciones') ? 'active' : '' }}">

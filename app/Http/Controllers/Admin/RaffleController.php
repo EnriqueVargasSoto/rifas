@@ -177,7 +177,7 @@ class RaffleController extends Controller
         $user_id_1 = $request->query('user_id_1');
         $user_id_2 = $request->query('user_id_2');
         $user_id_3 = $request->query('user_id_3');
-        $status = $request->query('status',[]);
+        $status = $request->query('status', []);
         $start = $request->query('start');
         $end = $request->query('end');
 
@@ -188,7 +188,7 @@ class RaffleController extends Controller
         }
 
         $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser', 'raffleImages')
-            ->byStatus2($request->query('status',[]))
+            ->byStatus2($request->query('status', []))
             ->bySearch($search)
             ->betweenNumber($start, $end)
             ->byRoleUser()
@@ -213,7 +213,7 @@ class RaffleController extends Controller
             }
 
             $rafflesLiquided = Raffle::whereIn('id', $request->input('selectedItems'))->where('status', 'Liquidada')->exists();
-            if($rafflesLiquided){
+            if ($rafflesLiquided) {
                 return redirect()->route('rifas.status')->with('error', 'No se puede cambiar el estado de una o mas rifas que ya se encuentra liquidada');
             }
 
@@ -238,6 +238,8 @@ class RaffleController extends Controller
             $changeStatusRequest->user_id = auth('web')->user()->id;
             $changeStatusRequest->user_id_gestion = auth('web')->user()->id;
             $changeStatusRequest->transaction_id = $request->input('transaction_id');
+            $changeStatusRequest->user_id_gestion = auth('web')->user()->id;
+
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $path = $image->store('/change-status-requests');
@@ -255,11 +257,13 @@ class RaffleController extends Controller
                 $changeStatusRaffle->change_status_request_id = $changeStatusRequest->id;
                 $changeStatusRaffle->before_status = $raffle->status;
                 $changeStatusRaffle->after_status = $request->input('status');
+
                 $changeStatusRaffle->save();
 
 
-                if($changeStatusRequest->status_request != "Liquidada"){
+                if ($changeStatusRequest->status_request != "Liquidada") {
                     $raffle->status = $request->input('status');
+                    $raffle->user_id = $changeStatusRequest->user_id;
                     // $raffle->transaction_liquidation_id = $request->input('transaction_id');
                     // $raffle->liquidation_at = now();
                     $raffle->save();
@@ -277,11 +281,10 @@ class RaffleController extends Controller
                     //     $payment->image_payment_url = $changeStatusRequest->image_url;
                     //     $payment->save();
                     // }
-                }else{
-                    $raffle->status="Por aprobar";
+                } else {
+                    $raffle->status = "Por aprobar";
                     $raffle->save();
                 }
-
             }
 
 
@@ -291,7 +294,4 @@ class RaffleController extends Controller
             return redirect()->route('rifas.status')->with('error', 'Error al actualizar la rifa: ' . $e->getMessage());
         }
     }
-
-
-
 }

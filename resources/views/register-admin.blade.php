@@ -52,7 +52,7 @@
                             </div>
 
                             <div class="input-group mb-4">
-                                <input type="text" class="form-control" name="unit" placeholder="Unidad" >
+                                <input type="text" class="form-control" name="unit" placeholder="Institución" >
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -70,7 +70,7 @@
                             </div>
 
                             <div class="input-group mb-4">
-                                <input type="text" class="form-control" name="position" placeholder="Posición" >
+                                <input type="text" class="form-control" name="position" placeholder="Cargo" >
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
