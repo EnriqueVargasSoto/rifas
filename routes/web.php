@@ -64,6 +64,7 @@ Route::delete('/purchases/delete-invoice-payment-image/{id}', [PurchaseControlle
 
 
 Route::group(['middleware' => 'auth:web'], function () {
+    Route::get('/user-search', [UserController::class, 'search'])->name('users.search');
     Route::resource('users', UserController::class);
     Route::post('/rifas/store-file', [RaffleController::class, 'storeFile'])->name('rifas.storeFiles');
     Route::delete('/rifas/delete-file/{id}', [RaffleController::class, 'deleteFile'])->name('rifas.deleteFile');

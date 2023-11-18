@@ -13,9 +13,8 @@ class AssignmentController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        $assignments =  Assignment::with('firstUser', 'secondUser', 'thirdUser')->paginate(12);
-        return view('intranet.pages.assignment.index', compact(['assignments', 'users']));
+        $assignments =  Assignment::with('firstUser', 'secondUser', 'thirdUser')->orderBy('id','desc')->paginate(12);
+        return view('intranet.pages.assignment.index', compact(['assignments']));
     }
 
     public function store(Request $request)

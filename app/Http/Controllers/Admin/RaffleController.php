@@ -22,22 +22,18 @@ class RaffleController extends Controller
         $search = $request->query('search');
         $is_visible_in_web = $request->query('is_visible_in_web', '');
 
-        $user_id_1 = $request->query('user_id_1');
-        $user_id_2 = $request->query('user_id_2');
-        $user_id_3 = $request->query('user_id_3');
+        $user_id = $request->query('user_id');
+        $user_name = $request->query('user_name');
         $status = $request->query('status');
 
         $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser', 'raffleImages')
             ->byStatus($status)
-            ->byFirstUser($user_id_1)
-            ->bySecondUser($user_id_2)
-            ->byThirdUser($user_id_3)
+            ->byUserId($user_id)
             ->byIsVisibleInWeb($is_visible_in_web)
             ->bySearch($search)
             ->paginate(12);
 
-        $users = User::orderBy('name', 'asc')->get();
-        return view('intranet.pages.raffles.index', compact('raffles', 'search', 'users', 'is_visible_in_web', 'user_id_1', 'user_id_2', 'user_id_3', 'status'));
+        return view('intranet.pages.raffles.index', compact('raffles', 'search', 'is_visible_in_web', 'user_id', 'status', 'user_name'));
     }
 
     /**
@@ -61,9 +57,9 @@ class RaffleController extends Controller
             $raffle->is_visible_in_web = $request->input('is_visible_in_web', 0);
             $raffle->is_active = $request->input('is_active', 1);
             $raffle->price = $request->input('price', 10);
-            $raffle->user_id_1 = $request->input('user_id_1');
-            $raffle->user_id_2 = $request->input('user_id_2');
-            $raffle->user_id_3 = $request->input('user_id_3');
+            $raffle->user_id_1 = $request->input('user_id_1',null);
+            $raffle->user_id_2 = $request->input('user_id_2',null);
+            $raffle->user_id_3 = $request->input('user_id_3',null);
             $raffle->save();
             return redirect()->route('rifas.index')->with('success', 'Rifa creada correctamente');
         } catch (\Exception $e) {
@@ -136,15 +132,15 @@ class RaffleController extends Controller
     {
         try {
             $raffle = Raffle::find($id);
-            $raffle->status = $request->input('status');
+            // $raffle->status = $request->input('status');
             $raffle->number = $request->input('number');
             $raffle->code = $request->input('code');
             $raffle->is_visible_in_web = $request->input('is_visible_in_web', 0);
-            $raffle->is_active = $request->input('is_active', 1);
-            $raffle->price = $request->input('price', 10);
-            $raffle->user_id_1 = $request->input('user_id_1');
-            $raffle->user_id_2 = $request->input('user_id_2');
-            $raffle->user_id_3 = $request->input('user_id_3');
+            //$raffle->is_active = $request->input('is_active', 1);
+            //$raffle->price = $request->input('price', 20);
+            // $raffle->user_id_1 = $request->input('user_id_1');
+            // $raffle->user_id_2 = $request->input('user_id_2');
+            // $raffle->user_id_3 = $request->input('user_id_3');
             $raffle->save();
 
             return redirect()->route('rifas.index')->with('success', 'Rifa actualizada correctamente');
@@ -171,12 +167,8 @@ class RaffleController extends Controller
 
     public function status(Request $request)
     {
-        $search = $request->query('search');
-        $is_visible_in_web = $request->query('is_visible_in_web', '');
-
-        $user_id_1 = $request->query('user_id_1');
-        $user_id_2 = $request->query('user_id_2');
-        $user_id_3 = $request->query('user_id_3');
+        $user_id = $request->query('user_id');
+        $user_name = $request->query('user_name');
         $status = $request->query('status', []);
         $start = $request->query('start');
         $end = $request->query('end');
@@ -189,14 +181,12 @@ class RaffleController extends Controller
 
         $raffles = Raffle::with('firstUser', 'secondUser', 'thirdUser', 'raffleImages')
             ->byStatus2($request->query('status', []))
-            ->bySearch($search)
             ->betweenNumber($start, $end)
             ->byRoleUser()
+            ->byUserId($user_id)
             ->paginate($paginateRows);
 
-        $users = User::orderBy('name', 'asc')->get();
-
-        return view('intranet.pages.raffles.status', compact('raffles', 'status', 'users', 'search', 'is_visible_in_web', 'user_id_1', 'user_id_2', 'user_id_3', 'start', 'end'));
+        return view('intranet.pages.raffles.status', compact('raffles', 'status', 'user_name', 'user_id', 'start', 'end'));
     }
 
 

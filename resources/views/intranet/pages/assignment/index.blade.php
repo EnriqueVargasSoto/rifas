@@ -57,7 +57,14 @@
                                             <td>{{ $assignment->start }}</td>
                                             <td>{{ $assignment->end }}</td>
                                             <td>{{ $assignment->codes }}</td>
-                                            <td>@if($assignment->is_visible_in_web==1) Si @elseif($assignment->is_visible_in_web==0) No @else @endif  </td>
+                                            <td>
+                                                @if ($assignment->is_visible_in_web == 1)
+                                                    Si
+                                                @elseif($assignment->is_visible_in_web == 0)
+                                                    No
+                                                @else
+                                                @endif
+                                            </td>
                                             <td>{{ $assignment->created_at->format('d/m/Y') }}</td>
 
                                         </tr>
@@ -100,42 +107,44 @@
                     <div class="modal-body">
 
                         <div class="row">
-                            <div class="mb-3 col-md-12">
-                                <h4 class="card-title">Opción 1</h4>
-                                <select class="default-select form-control wide" name="user_id_1">
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->short_name }}</option>
-                                    @endforeach
+                            <div class="col-md-12 mb-3">
+                                <label for="user_id_1">
+                                    Opcion 1
+                                </label>
+                                <select name="user_id_1" id="user_id_1" style="width: 100% !important"  class="form-control w-100" value="">
+                                    <option value=""></option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="mb-3 col-md-12">
-                                <h4 class="card-title">Opción 2</h4>
-                                <select class="default-select form-control wide" name="user_id_2">
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->short_name }}</option>
-                                    @endforeach
+                            <div class="col-md-12 mb-3">
+                                <label for="user_id_2">
+                                    Opcion 2
+                                </label>
+                                <select name="user_id_2" id="user_id_2" style="width: 100% !important"  class="form-control w-100" value="">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-12 mb-3">
+                                <label for="user_id_3">
+                                    Opcion 3
+                                </label>
+                                <select name="user_id_3" id="user_id_3" style="width: 100% !important" class="form-control w-100" value="">
+                                    <option value=""></option>
                                 </select>
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="mb-3 col-md-12">
-                                <h4 class="card-title">Opción 3</h4>
-                                <select class="default-select form-control wide" name="user_id_3">
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->short_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="mb-3 col-md-12">
-                                <h4 class="card-title">Mostrar todos las rifas en web <small>(Se le aplicara a todas las rifas la opcion seleccionada)</small></h4>
+                                <h4 class="card-title">Mostrar todos las rifas en web <small>(Se le aplicara a todas las
+                                        rifas la opcion seleccionada)</small></h4>
                                 <select class="default-select form-control wide" name="is_visible_in_web">
-                                    <option value=""> -- seleccione --  </option>
+                                    <option value=""> -- seleccione -- </option>
                                     <option value="si">Si</option>
                                     <option value="no">No</option>
                                 </select>
@@ -157,7 +166,8 @@
                             <div class="col-md-12">
                                 <h4 class="card-title">
                                     Puedes ingresar los numeros de rifas separados por comas (,). <small class="text-muted">
-                                        Usar esta opción si no deseas usar la opción de asignación automática por rangos</small>
+                                        Usar esta opción si no deseas usar la opción de asignación automática por
+                                        rangos</small>
                                 </h4>
                                 <textarea name="codes" class="form-control input-default my-3" id="" cols="30" rows="4"></textarea>
                             </div>
@@ -173,4 +183,95 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // Inicializa el elemento select con Select2
+            $('#user_id_1').select2({
+                language: "es",
+                ajax: {
+                    url: '/user-search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.map(function(user) {
+                                return {
+                                    id: user.id,
+                                    text: user.name
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: '',
+                minimumInputLength: 3
+            });
+
+            $('#user_id_2').select2({
+                language: "es",
+                ajax: {
+                    url: '/user-search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.map(function(user) {
+                                return {
+                                    id: user.id,
+                                    text: user.name
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: '',
+                minimumInputLength: 3
+            });
+
+            $('#user_id_3').select2({
+                language: "es",
+                ajax: {
+                    url: '/user-search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.map(function(user) {
+                                return {
+                                    id: user.id,
+                                    text: user.name
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: '',
+                minimumInputLength: 3
+            });
+        });
+    </script>
 @endsection

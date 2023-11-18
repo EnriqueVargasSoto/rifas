@@ -146,4 +146,15 @@ class Raffle extends Model
             ->orWhere('user_id_2', auth()->user()->id)
             ->orWhere('user_id_3', auth()->user()->id);
     }
+
+
+    public function scopeByUserId($query, $userId = null)
+    {
+        if ($userId) {
+            return $query->where('user_id_1', $userId)
+                ->orWhere('user_id_2', $userId)
+                ->orWhere('user_id_3', $userId);
+        }
+        return $query;
+    }
 }

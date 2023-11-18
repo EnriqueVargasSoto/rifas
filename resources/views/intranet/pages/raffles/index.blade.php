@@ -50,20 +50,18 @@
                             </select>
                         </div>
 
-                        @foreach (range(1, 3) as $index)
-                            <div class="col-md-4 mb-3">
-                                <label for="user_id_{{ $index }}">Usuario {{ $index }}</label>
-                                <select name="user_id_{{ $index }}" class="form-control">
-                                    <option value="" selected>Seleccione</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}"
-                                            @if ($user->id == ${"user_id_$index"}) selected @endif>
-                                            {{ $user->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endforeach
+                        <div class="col-md-3 mb-3">
+                            <label for="user_id_1">
+                                Buscar por usuario
+                            </label>
+                            <input type="hidden" name="user_name" id="user_name_1" value="{{ $user_name }}">
+                            <select name="user_id" id="user_id_1" class="form-control" value="{{ $user_id }}">
+                                <option value=""></option>
+                                @if ($user_id)
+                                    <option value="{{ $user_id }}" selected>{{ $user_name }}</option>
+                                @endif
+                            </select>
+                        </div>
 
                         <div class="col-md-2 mt-4">
 
@@ -166,7 +164,7 @@
                                         {{ $raffles->total() }} registros</p>
                                 </div>
 
-                                {{ $raffles->appends(['search' => $search, 'status' => $status, 'is_visible_in_web' => $is_visible_in_web, 'user_id_1' => $user_id_1, 'user_id_2' => $user_id_2, 'user_id_3' => $user_id_3])->links() }}
+                                {{ $raffles->appends(['search' => $search, 'status' => $status, 'is_visible_in_web' => $is_visible_in_web, 'user_id' => $user_id, 'user_name' => $user_name])->links() }}
                             </div>
                         </div>
                     </div>
@@ -208,45 +206,6 @@
                                         Código
                                     </label>
                                     <input type="text" name="code" class="form-control ">
-                                </div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Usuario 1
-                                    </label>
-                                    <select name="user_id_1" class="form-control">
-                                        <option value="">Seleccione</option>
-                                        @foreach ($users as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Usuario 2
-                                    </label>
-                                    <select name="user_id_2" class="form-control">
-                                        <option value="">Seleccione</option>
-                                        @foreach ($users as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <div class="form-group">
-                                    <label for="">
-                                        Usuario 3
-                                    </label>
-                                    <select name="user_id_3" class="form-control">
-                                        <option value="">Seleccione</option>
-                                        @foreach ($users as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -297,7 +256,7 @@
                                             value="{{ $item->code }}">
                                     </div>
                                 </div>
-                                <div class="mb-3 col-md-6">
+                                {{-- <div class="mb-3 col-md-6">
                                     <div class="form-group">
                                         <label for="">
                                             Estado
@@ -307,16 +266,16 @@
                                             <option value="Liquidada" @if ($item->status == 'Liquidada') selected @endif>
                                                 Liquidada</option>
                                             <option value="Stock" @if ($item->status == 'Stock') selected @endif>Stock
-                                            </option>
+                                            </option> --}}
                                             {{-- <option value="Fiada" @if ($item->status == 'Fiada') selected @endif>Fiada
                                             </option> --}}
-                                            <option value="Pagada" @if ($item->status == 'Pagada') selected @endif>
+                                            {{-- <option value="Pagada" @if ($item->status == 'Pagada') selected @endif>
                                                 Pagada</option>
                                             <option value="Reservada" @if ($item->status == 'Reservada') selected @endif>
                                                 Reservada</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="mb-3 col-md-6">
                                     <div class="form-group">
@@ -333,54 +292,7 @@
                                         </select>
                                     </div>
                                 </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <div class="form-group">
-                                        <label for="">
-                                            Usuario 1
-                                        </label>
-                                        <select name="user_id_1" class="form-control" value="{{ $item->user_id_1 }}">
-                                            <option value="">Seleccione</option>
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}"
-                                                    @if ($user->id == $item->user_id_1) selected @endif>{{ $user->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <div class="form-group">
-                                        <label for="">
-                                            Usuario 2
-                                        </label>
-                                        <select name="user_id_2" class="form-control" value="{{ $item->user_id_2 }}">
-                                            <option value="">Seleccione</option>
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}"
-                                                    @if ($user->id == $item->user_id_2) selected @endif>{{ $user->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <div class="form-group">
-                                        <label for="">
-                                            Usuario 3
-                                        </label>
-                                        <select name="user_id_3" class="form-control" value="{{ $item->user_id_3 }}">
-                                            <option value="">Seleccione</option>
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}"
-                                                    @if ($user->id == $item->user_id_3) selected @endif>{{ $user->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
-
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button>
@@ -505,5 +417,50 @@
             });
             viewer.show();
         }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+
+            // Inicializa el elemento select con Select2
+            $('#user_id_1').select2({
+                language: "es",
+                ajax: {
+                    url: '/user-search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.map(function(user) {
+                                return {
+                                    id: user.id,
+                                    text: user.name
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: '',
+                minimumInputLength: 3,
+                data: [{
+                    id: @json($user_id),
+                    text: @json($user_name)
+                }]
+            });
+
+
+            $('#user_id_1').on('select2:select', function(e) {
+                var data = e.params.data;
+                document.getElementById('user_name_1').value = data.text;
+            });
+        });
     </script>
 @endsection

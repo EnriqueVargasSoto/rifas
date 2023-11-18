@@ -74,7 +74,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
 
-        if(!$request->password){
+        if (!$request->password) {
             return back()->with('error', 'La contraseña es obligatoria');
         }
         //
@@ -94,7 +94,7 @@ class UserController extends Controller
         if ($request->observation) {
             $user->observation = $request->observation;
         }
-        if(in_array($request->input('show_information_in_web'),[0,1])){
+        if (in_array($request->input('show_information_in_web'), [0, 1])) {
             $user->show_information_in_web = $request->input('show_information_in_web', 0);
         }
 
@@ -113,5 +113,13 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function search(Request $request)
+    {
+        $search =  $request->query('q');
+        $users = User::search($search)->limit(20)->get();
+        return response()->json($users);
     }
 }
