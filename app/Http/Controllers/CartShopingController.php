@@ -31,9 +31,20 @@ class CartShopingController extends Controller
         $total = $raffles->sum('price');
 
         $orders = Order::with('order_items.raffle','order_images')->where('client_id', auth()->guard('client')->user()->id)->get();
+
+        $orderItemsGroupByStatus=[];
+        $orderImages = [];
+
+        foreach ($orders as $order) {
+            $orderImages = array_merge($orderImages, $order->order_images->toArray());
+            foreach ($order->order_items as $orderItem) {
+                $orderItemsGroupByStatus[$order->status][] = $orderItem;
+            }
+        }
+
         $client = auth()->guard('client')->user();
 
-        return view('cart', compact('cartItems', 'raffles', 'total','userInformation','orders','client'));
+        return view('cart', compact('cartItems', 'raffles', 'total','userInformation','client','orderItemsGroupByStatus','orderImages'));
     }
 
     public function addItem(Request $request)
