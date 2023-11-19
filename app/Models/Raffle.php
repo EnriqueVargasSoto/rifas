@@ -138,7 +138,7 @@ class Raffle extends Model
 
 
     public function scopeByRoleUser($query){
-        if(auth()->user()->role->role == 'Super Admin'){
+        if(auth()->user()->role->role == 'Super Admin' || auth()->user()->role->role == 'Administador'){
             return $query;
         }
 

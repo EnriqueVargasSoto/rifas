@@ -19,7 +19,7 @@
             <div class="w-100">
 
 
-                <a href="{{ route('purchases.index') }}" class="btn btn-primary d-md-none btn-block">
+                <a href="/cart#compras" class="btn btn-primary d-md-none btn-block">
                     Ver mis compras
                 </a>
             </div>

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12 mb-1">
             <div class="">
-                <a href="{{ route('purchases.index') }}" class="btn btn-primary d-md-none btn-block">
+                <a href="/cart#compras" class="btn btn-primary d-md-none btn-block">
                     Ver mis compras
                 </a>
                 <a href="{{ route('welcome') }}" class="btn btn-primary d-md-none btn-block">

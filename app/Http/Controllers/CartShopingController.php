@@ -30,7 +30,10 @@ class CartShopingController extends Controller
         // Calcula el total utilizando el método sum
         $total = $raffles->sum('price');
 
-        return view('cart', compact('cartItems', 'raffles', 'total','userInformation'));
+        $orders = Order::with('order_items.raffle','order_images')->where('client_id', auth()->guard('client')->user()->id)->get();
+        $client = auth()->guard('client')->user();
+
+        return view('cart', compact('cartItems', 'raffles', 'total','userInformation','orders','client'));
     }
 
     public function addItem(Request $request)
