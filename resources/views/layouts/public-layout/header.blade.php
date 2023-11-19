@@ -24,7 +24,7 @@
                     </a>
                 </li>
                 <li class="nav-item {{ request()->is('purchases') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('purchases.index') }}">
+                    <a class="nav-link" href="/cart#compras">
                         <i class="fas fa-shipping-fast"></i> Mis compras
                     </a>
                 </li>
