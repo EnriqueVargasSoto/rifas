@@ -34,11 +34,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="">Contraseña <small>(Complete si va modificar su
-                                contraseña)</small></label>
-                        <input type="text" class="form-control" name="password" placeholder="Contraseña"
+                        <label for="">Contraseña </label>
+                        <input type="text" class="form-control" value="{{$client->clave}}"" name="password" placeholder="Contraseña"
                             autocomplete="current-password">
-
                     </div>
 
                     <div class="form-group">
@@ -49,7 +47,7 @@
                     <div class="row mt-3">
                         <!-- /.col -->
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block">Actualizar datos</button>
+                            <button type="submit" class="btn btn-primary btn-block" >Actualizar datos</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -210,7 +208,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block" onclick="openWhatsAppWindow()">
                             Comprar rifas
                         </button>
 
@@ -338,6 +336,14 @@
                 });
                 viewer.show();
             }
+
+            function openWhatsAppWindow(){
+                const user= @json($userInformation);
+                const userPhone = user? user.phone :  '924061643' 
+                var url = 'https://api.whatsapp.com/send?phone='+userPhone +'&text=Hola, realice la compra de las rifas via web...';
+                window.open(url, '_blank');
+            }
+
         </script>
         <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
         <script>
@@ -351,23 +357,11 @@
                     rules: {
                         phone: {
                             required: true,
-                        },
-                        name: {
-                            required: true
-                        },
-                        last_name: {
-                            required: true
-                        },
+                        }
                     },
                     messages: {
                         phone: {
                             required: "Por favor ingrese su celular",
-                        },
-                        name: {
-                            required: "Por favor ingrese su nombre",
-                        },
-                        last_name: {
-                            required: "Por favor ingrese su apellido",
                         }
                     },
                     errorElement: 'span',

@@ -72,14 +72,14 @@ class RegisterClientController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required',
-                'last_name' => 'required',
+                // 'name' => 'required',
+                // 'last_name' => 'required',
                 'phone' => 'required'
             ]);
 
             $client = Client::find(auth()->guard('client')->user()->id);
-            $client->name = $request->input('name');
-            $client->last_name = $request->input('last_name');
+            $client->name = $request->input('name')? $request->input('name') : '-';
+            $client->last_name = $request->input('last_name')? $request->input('last_name') : '-';
             $client->phone = $request->input('phone');
             $client->address = $request->input('address');
             if ($request->input('password')) {
